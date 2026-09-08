@@ -8,7 +8,8 @@ on:
     branches: [main]
 
 jobs:
-  test:
+  unit-tests:
+    name: Unit Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -24,5 +25,30 @@ jobs:
       - name: Download dependencies
         run: go mod download
 
-      - name: Run tests
-        run: go test ./... -count=1
+      - name: Run unit tests
+        run: go test ./internal/... ./pkg/... -count=1
+
+
+  opendota-tests:
+    name: OpenDota API Tests
+    runs-on: ubuntu-latest
+
+    # OpenDota — внешний сервис.
+    # Если он временно лежит, не хотим блокировать весь CI.
+    continue-on-error: true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Download dependencies
+        run: go mod download
+
+      - name: Run OpenDota integration tests
+        run: go test ./tests/opendota -v -count=1
