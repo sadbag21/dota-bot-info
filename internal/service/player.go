@@ -49,6 +49,25 @@ type HeroStats struct {
 	WinRate float64
 }
 
+type PlayerStats struct {
+	MatchesAnalyzed int
+
+	AvgKills   float64
+	AvgDeaths  float64
+	AvgAssists float64
+	KDA        float64
+
+	AvgGPM      float64
+	AvgXPM      float64
+	AvgLastHits float64
+
+	AvgHeroDamage  float64
+	AvgTowerDamage float64
+	AvgHeroHealing float64
+
+	AvgDuration float64
+}
+
 func NewPlayerService(dotaClient *dota.Client) *PlayerService {
 	return &PlayerService{
 		dotaClient: dotaClient,
@@ -302,4 +321,87 @@ func (s *PlayerService) GetHeroStats(
 	}
 
 	return result, nil
+}
+
+func averageTotal(total dota.Total) float64 {
+	if total.N <= 0 {
+		return 0
+	}
+
+	return total.Sum / float64(total.N)
+}
+
+func (s *PlayerService) GetPlayerStats(
+	accountID int64,
+) (*PlayerStats, error) {
+	totals, err := s.dotaClient.GetTotals(accountID)
+	if err != nil {
+		return nil, fmt.Errorf(
+			"failed to get player totals: %w",
+			err,
+		)
+	}
+
+	totalMap := make(map[string]dota.Total)
+
+	for _, total := range totals {
+		totalMap[total.Field] = total
+	}
+
+	avgKills := averageTotal(
+		totalMap["kills"],
+	)
+
+	avgDeaths := averageTotal(
+		totalMap["deaths"],
+	)
+
+	avgAssists := averageTotal(
+		totalMap["assists"],
+	)
+
+	var kda float64
+
+	if avgDeaths > 0 {
+		kda = (avgKills + avgAssists) / avgDeaths
+	}
+
+	matchesAnalyzed := totalMap["kills"].N
+
+	return &PlayerStats{
+		MatchesAnalyzed: matchesAnalyzed,
+
+		AvgKills:   avgKills,
+		AvgDeaths:  avgDeaths,
+		AvgAssists: avgAssists,
+		KDA:        kda,
+
+		AvgGPM: averageTotal(
+			totalMap["gold_per_min"],
+		),
+
+		AvgXPM: averageTotal(
+			totalMap["xp_per_min"],
+		),
+
+		AvgLastHits: averageTotal(
+			totalMap["last_hits"],
+		),
+
+		AvgHeroDamage: averageTotal(
+			totalMap["hero_damage"],
+		),
+
+		AvgTowerDamage: averageTotal(
+			totalMap["tower_damage"],
+		),
+
+		AvgHeroHealing: averageTotal(
+			totalMap["hero_healing"],
+		),
+
+		AvgDuration: averageTotal(
+			totalMap["duration"],
+		),
+	}, nil
 }

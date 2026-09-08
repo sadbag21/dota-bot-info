@@ -61,3 +61,18 @@ func (c *Client) GetPlayerHeroes(accountID int64) ([]PlayerHero, error) {
 
 	return heroes, nil
 }
+
+func (c *Client) GetTotals(accountID int64) ([]Total, error) {
+	var totals []Total
+
+	err := c.get(
+		fmt.Sprintf("/players/%d/totals", accountID),
+		&totals,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return totals, nil
+}

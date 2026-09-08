@@ -9,13 +9,16 @@ func (b *Bot) handleStart(message *tgbotapi.Message) {
 
 Я бот для получения информации о Dota 2 игроках.
 
-Основные команды:
-
 👤 /player &lt;Dota ID&gt;
 ⚔️ /matches &lt;Dota ID&gt;
+🦸 /heroes &lt;Dota ID&gt;
+📈 /stats &lt;Dota ID&gt;
 📚 /help`
 
-	b.sendMessage(message.Chat.ID, text)
+	b.sendMessage(
+		message.Chat.ID,
+		text,
+	)
 }
 
 func (b *Bot) handleHelp(message *tgbotapi.Message) {
@@ -26,9 +29,13 @@ func (b *Bot) handleHelp(message *tgbotapi.Message) {
 
 /player &lt;Dota ID&gt; — информация об игроке
 /matches &lt;Dota ID&gt; — последние матчи
-/heroes &lt;Dota ID&gt; — популярные герои`
+/heroes &lt;Dota ID&gt; — популярные герои
+/stats &lt;Dota ID&gt; — расширенная статистика`
 
-	b.sendMessage(message.Chat.ID, text)
+	b.sendMessage(
+		message.Chat.ID,
+		text,
+	)
 }
 
 func (b *Bot) sendMessage(chatID int64, text string) {

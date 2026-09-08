@@ -44,6 +44,9 @@ func (b *Bot) handleUpdate(update tgbotapi.Update) {
 	case "heroes":
 		b.handleHeroes(message)
 
+	case "stats":
+		b.handleStats(message)
+
 	default:
 		b.sendMessage(
 			message.Chat.ID,
@@ -259,6 +262,86 @@ func (b *Bot) handleHeroes(message *tgbotapi.Message) {
 	text := formatter.FormatHeroes(
 		accountID,
 		heroes,
+	)
+
+	b.sendMessage(
+		message.Chat.ID,
+		text,
+	)
+}
+
+func (b *Bot) handleStats(
+	message *tgbotapi.Message,
+) {
+	args := strings.TrimSpace(
+		message.CommandArguments(),
+	)
+
+	if args == "" {
+		b.sendMessage(
+			message.Chat.ID,
+			"❌ Укажи Dota ID.\n\n"+
+				"Пример:\n"+
+				"<code>/stats 1677175114</code>",
+		)
+
+		return
+	}
+
+	accountID, err := strconv.ParseInt(
+		args,
+		10,
+		64,
+	)
+
+	if err != nil {
+		b.sendMessage(
+			message.Chat.ID,
+			"❌ Dota ID должен быть числом.\n\n"+
+				"Пример:\n"+
+				"<code>/stats 1677175114</code>",
+		)
+
+		return
+	}
+
+	if accountID <= 0 {
+		b.sendMessage(
+			message.Chat.ID,
+			"❌ Dota ID должен быть положительным числом.",
+		)
+
+		return
+	}
+
+	log.Printf(
+		"Getting extended stats for account_id=%d",
+		accountID,
+	)
+
+	stats, err := b.service.GetPlayerStats(
+		accountID,
+	)
+
+	if err != nil {
+		log.Printf(
+			"Failed to get stats for %d: %v",
+			accountID,
+			err,
+		)
+
+		b.sendMessage(
+			message.Chat.ID,
+			"❌ Не удалось получить статистику игрока.\n\n"+
+				"Попробуй ещё раз позже.",
+		)
+
+		return
+	}
+
+	text := formatter.FormatStats(
+		accountID,
+		stats,
 	)
 
 	b.sendMessage(

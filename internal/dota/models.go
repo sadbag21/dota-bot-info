@@ -45,3 +45,9 @@ type PlayerHero struct {
 	Games      int   `json:"games"`
 	Win        int   `json:"win"`
 }
+
+type Total struct {
+	Field string  `json:"field"`
+	N     int     `json:"n"`
+	Sum   float64 `json:"sum"`
+}
