@@ -4,10 +4,23 @@ import "sort"
 
 type ImpactEntry struct {
 	PlayerSlot int
-	Name       string
-	HeroName   string
-	Score      float64
-	Won        bool
+
+	Name     string
+	HeroName string
+
+	Score float64
+	Won   bool
+
+	KDAContribution         float64
+	AssistsContribution     float64
+	HeroDamageContribution  float64
+	TowerDamageContribution float64
+	HealingContribution     float64
+	GPMContribution         float64
+	XPMContribution         float64
+	NetWorthContribution    float64
+	SurvivalContribution    float64
+	WinContribution         float64
 }
 
 type impactCandidate struct {
@@ -182,27 +195,49 @@ func calculateImpactRanking(match *MatchDetails) []ImpactEntry {
 			winScore = 1.0
 		}
 
-		score := kdaScore*0.20 +
-			assistsScore*0.10 +
-			heroDamageScore*0.20 +
-			towerDamageScore*0.12 +
-			healingScore*0.10 +
-			gpmScore*0.06 +
-			xpmScore*0.05 +
-			netWorthScore*0.05 +
-			survivalScore*0.04 +
-			winScore*0.08
+		kdaContribution := kdaScore * 20
+		assistsContribution := assistsScore * 10
+		heroDamageContribution := heroDamageScore * 20
+		towerDamageContribution := towerDamageScore * 12
+		healingContribution := healingScore * 10
+		gpmContribution := gpmScore * 6
+		xpmContribution := xpmScore * 5
+		netWorthContribution := netWorthScore * 5
+		survivalContribution := survivalScore * 4
+		winContribution := winScore * 8
 
-		score *= 100
+		score := kdaContribution +
+			assistsContribution +
+			heroDamageContribution +
+			towerDamageContribution +
+			healingContribution +
+			gpmContribution +
+			xpmContribution +
+			netWorthContribution +
+			survivalContribution +
+			winContribution
 
 		ranking = append(
 			ranking,
 			ImpactEntry{
 				PlayerSlot: player.PlayerSlot,
-				Name:       player.Name,
-				HeroName:   player.HeroName,
-				Score:      score,
-				Won:        candidate.Won,
+
+				Name:     player.Name,
+				HeroName: player.HeroName,
+
+				Score: score,
+				Won:   candidate.Won,
+
+				KDAContribution:         kdaContribution,
+				AssistsContribution:     assistsContribution,
+				HeroDamageContribution:  heroDamageContribution,
+				TowerDamageContribution: towerDamageContribution,
+				HealingContribution:     healingContribution,
+				GPMContribution:         gpmContribution,
+				XPMContribution:         xpmContribution,
+				NetWorthContribution:    netWorthContribution,
+				SurvivalContribution:    survivalContribution,
+				WinContribution:         winContribution,
 			},
 		)
 	}

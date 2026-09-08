@@ -50,6 +50,9 @@ func (b *Bot) handleUpdate(update tgbotapi.Update) {
 	case "match":
 		b.handleMatch(message)
 
+	case "impact":
+		b.handleImpact(message)
+
 	default:
 		b.sendMessage(
 			message.Chat.ID,
@@ -427,6 +430,82 @@ func (b *Bot) handleMatch(
 	}
 
 	text := formatter.FormatMatch(match)
+
+	b.sendMessage(
+		message.Chat.ID,
+		text,
+	)
+}
+
+func (b *Bot) handleImpact(
+	message *tgbotapi.Message,
+) {
+	args := strings.TrimSpace(
+		message.CommandArguments(),
+	)
+
+	if args == "" {
+		b.sendMessage(
+			message.Chat.ID,
+			"❌ Укажи Match ID.\n\n"+
+				"Пример:\n"+
+				"<code>/impact 8983647546</code>",
+		)
+		return
+	}
+
+	matchID, err := strconv.ParseInt(
+		args,
+		10,
+		64,
+	)
+
+	if err != nil {
+		b.sendMessage(
+			message.Chat.ID,
+			"❌ Match ID должен быть числом.\n\n"+
+				"Пример:\n"+
+				"<code>/impact 8983647546</code>",
+		)
+		return
+	}
+
+	if matchID <= 0 {
+		b.sendMessage(
+			message.Chat.ID,
+			"❌ Match ID должен быть положительным числом.",
+		)
+		return
+	}
+
+	log.Printf(
+		"Getting impact analysis for match_id=%d",
+		matchID,
+	)
+
+	match, err := b.service.GetMatchDetails(
+		matchID,
+	)
+
+	if err != nil {
+		log.Printf(
+			"Failed to get impact for match %d: %v",
+			matchID,
+			err,
+		)
+
+		b.sendMessage(
+			message.Chat.ID,
+			fmt.Sprintf(
+				"❌ Не удалось проанализировать матч.\n\n"+
+					"Match ID: <code>%d</code>",
+				matchID,
+			),
+		)
+		return
+	}
+
+	text := formatter.FormatImpact(match)
 
 	b.sendMessage(
 		message.Chat.ID,

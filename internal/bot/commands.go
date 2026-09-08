@@ -27,12 +27,15 @@ func (b *Bot) handleHelp(message *tgbotapi.Message) {
 /start — запустить бота
 /help — помощь
 
+👤 <b>Игрок</b>
 /player &lt;Dota ID&gt; — информация об игроке
 /matches &lt;Dota ID&gt; — последние матчи
 /heroes &lt;Dota ID&gt; — популярные герои
 /stats &lt;Dota ID&gt; — расширенная статистика
 
-/match &lt;Match ID&gt; — подробности матча`
+🏟 <b>Матч</b>
+/match &lt;Match ID&gt; — подробности матча
+/impact &lt;Match ID&gt; — оценка полезности игроков`
 
 	b.sendMessage(
 		message.Chat.ID,
