@@ -38,3 +38,10 @@ type Hero struct {
 	ID            int    `json:"id"`
 	LocalizedName string `json:"localized_name"`
 }
+
+type PlayerHero struct {
+	HeroID     int   `json:"hero_id"`
+	LastPlayed int64 `json:"last_played"`
+	Games      int   `json:"games"`
+	Win        int   `json:"win"`
+}

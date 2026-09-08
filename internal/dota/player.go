@@ -46,3 +46,18 @@ func (c *Client) GetRecentMatches(accountID int64) ([]RecentMatch, error) {
 
 	return matches, nil
 }
+
+func (c *Client) GetPlayerHeroes(accountID int64) ([]PlayerHero, error) {
+	var heroes []PlayerHero
+
+	err := c.get(
+		fmt.Sprintf("/players/%d/heroes", accountID),
+		&heroes,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return heroes, nil
+}

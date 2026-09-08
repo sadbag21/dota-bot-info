@@ -5,24 +5,28 @@ import (
 )
 
 func (b *Bot) handleStart(message *tgbotapi.Message) {
-	text := `Привет! 👋
+	text := `👋 Привет!
 
 Я бот для получения информации о Dota 2 игроках.
 
-Используй:
+Основные команды:
 
-/player <Dota ID> — информация об игроке
-/help — список команд`
+👤 /player &lt;Dota ID&gt;
+⚔️ /matches &lt;Dota ID&gt;
+📚 /help`
 
 	b.sendMessage(message.Chat.ID, text)
 }
 
 func (b *Bot) handleHelp(message *tgbotapi.Message) {
-	text := `📚 Доступные команды:
+	text := `📚 <b>Доступные команды</b>
 
 /start — запустить бота
 /help — помощь
-/player <Dota ID> — информация об игроке`
+
+/player &lt;Dota ID&gt; — информация об игроке
+/matches &lt;Dota ID&gt; — последние матчи
+/heroes &lt;Dota ID&gt; — популярные герои`
 
 	b.sendMessage(message.Chat.ID, text)
 }

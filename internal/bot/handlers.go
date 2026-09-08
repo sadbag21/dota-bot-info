@@ -38,6 +38,12 @@ func (b *Bot) handleUpdate(update tgbotapi.Update) {
 	case "player":
 		b.handlePlayer(message)
 
+	case "matches":
+		b.handleMatches(message)
+
+	case "heroes":
+		b.handleHeroes(message)
+
 	default:
 		b.sendMessage(
 			message.Chat.ID,
@@ -110,4 +116,153 @@ func (b *Bot) handlePlayer(message *tgbotapi.Message) {
 
 	// Отправляем его пользователю.
 	b.sendMessage(message.Chat.ID, text)
+}
+
+func (b *Bot) handleMatches(message *tgbotapi.Message) {
+	args := strings.TrimSpace(
+		message.CommandArguments(),
+	)
+
+	if args == "" {
+		b.sendMessage(
+			message.Chat.ID,
+			"❌ Укажи Dota ID.\n\n"+
+				"Пример:\n"+
+				"<code>/matches 1677175114</code>",
+		)
+		return
+	}
+
+	accountID, err := strconv.ParseInt(
+		args,
+		10,
+		64,
+	)
+	if err != nil {
+		b.sendMessage(
+			message.Chat.ID,
+			"❌ Dota ID должен быть числом.\n\n"+
+				"Пример:\n"+
+				"<code>/matches 1677175114</code>",
+		)
+		return
+	}
+
+	if accountID <= 0 {
+		b.sendMessage(
+			message.Chat.ID,
+			"❌ Dota ID должен быть положительным числом.",
+		)
+		return
+	}
+
+	log.Printf(
+		"Getting recent matches for account_id=%d",
+		accountID,
+	)
+
+	matches, err := b.service.GetRecentMatchesInfo(
+		accountID,
+		10,
+	)
+	if err != nil {
+		log.Printf(
+			"Failed to get recent matches for %d: %v",
+			accountID,
+			err,
+		)
+
+		b.sendMessage(
+			message.Chat.ID,
+			"❌ Не удалось получить последние матчи.\n\n"+
+				"Попробуй ещё раз позже.",
+		)
+		return
+	}
+
+	text := formatter.FormatMatches(
+		accountID,
+		matches,
+	)
+
+	b.sendMessage(
+		message.Chat.ID,
+		text,
+	)
+}
+
+func (b *Bot) handleHeroes(message *tgbotapi.Message) {
+	args := strings.TrimSpace(
+		message.CommandArguments(),
+	)
+
+	if args == "" {
+		b.sendMessage(
+			message.Chat.ID,
+			"❌ Укажи Dota ID.\n\n"+
+				"Пример:\n"+
+				"<code>/heroes 1677175114</code>",
+		)
+		return
+	}
+
+	accountID, err := strconv.ParseInt(
+		args,
+		10,
+		64,
+	)
+
+	if err != nil {
+		b.sendMessage(
+			message.Chat.ID,
+			"❌ Dota ID должен быть числом.\n\n"+
+				"Пример:\n"+
+				"<code>/heroes 1677175114</code>",
+		)
+		return
+	}
+
+	if accountID <= 0 {
+		b.sendMessage(
+			message.Chat.ID,
+			"❌ Dota ID должен быть положительным числом.",
+		)
+		return
+	}
+
+	log.Printf(
+		"Getting hero stats for account_id=%d",
+		accountID,
+	)
+
+	heroes, err := b.service.GetHeroStats(
+		accountID,
+		10,
+	)
+
+	if err != nil {
+		log.Printf(
+			"Failed to get hero stats for %d: %v",
+			accountID,
+			err,
+		)
+
+		b.sendMessage(
+			message.Chat.ID,
+			"❌ Не удалось получить статистику героев.\n\n"+
+				"Попробуй ещё раз позже.",
+		)
+
+		return
+	}
+
+	text := formatter.FormatHeroes(
+		accountID,
+		heroes,
+	)
+
+	b.sendMessage(
+		message.Chat.ID,
+		text,
+	)
 }
