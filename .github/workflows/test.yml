@@ -30,6 +30,8 @@ jobs:
 
 
   opendota-tests:
+    env:
+      RUN_OPENDOTA_TESTS: "1"
     name: OpenDota API Tests
     runs-on: ubuntu-latest
 

@@ -2,16 +2,29 @@ package dota
 
 import "fmt"
 
-func (c *Client) GetPlayer(accountID int64) (*Player, error) {
+func (c *Client) GetPlayer(
+	accountID int64,
+) (*Player, error) {
 	var player Player
 
 	err := c.get(
-		fmt.Sprintf("/players/%d", accountID),
+		fmt.Sprintf(
+			"/players/%d",
+			accountID,
+		),
 		&player,
 	)
 
 	if err != nil {
 		return nil, err
+	}
+
+	if player.Profile.AccountID == 0 {
+		return nil, fmt.Errorf(
+			"%w: player %d",
+			ErrNotFound,
+			accountID,
+		)
 	}
 
 	return &player, nil

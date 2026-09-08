@@ -12,6 +12,7 @@ import (
 )
 
 func TestGetPlayerTotals(t *testing.T) {
+	requireOpenDotaTests(t)
 	cute.NewTestBuilder().
 		Title("Get player totals").
 		Description(

@@ -13,6 +13,7 @@ import (
 )
 
 func TestGetRecentMatches(t *testing.T) {
+	requireOpenDotaTests(t)
 	cute.NewTestBuilder().
 		Title("Get recent player matches").
 		Description(
@@ -56,6 +57,7 @@ func TestGetRecentMatches(t *testing.T) {
 }
 
 func TestGetMatch(t *testing.T) {
+	requireOpenDotaTests(t)
 	cute.NewTestBuilder().
 		Title("Get Dota match").
 		Description(

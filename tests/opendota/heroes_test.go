@@ -12,6 +12,7 @@ import (
 )
 
 func TestGetHeroes(t *testing.T) {
+	requireOpenDotaTests(t)
 	cute.NewTestBuilder().
 		Title("Get Dota heroes").
 		Description(
@@ -46,6 +47,7 @@ func TestGetHeroes(t *testing.T) {
 }
 
 func TestGetPlayerHeroes(t *testing.T) {
+	requireOpenDotaTests(t)
 	cute.NewTestBuilder().
 		Title("Get player hero statistics").
 		Description(

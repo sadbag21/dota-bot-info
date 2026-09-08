@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/tls"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net"
 	"net/http"
@@ -24,24 +25,28 @@ func NewClient() *Client {
 	}
 
 	transport := &http.Transport{
-		// Используем только IPv4
 		DialContext: func(
 			ctx context.Context,
 			network string,
 			address string,
 		) (net.Conn, error) {
-			return dialer.DialContext(ctx, "tcp4", address)
+			return dialer.DialContext(
+				ctx,
+				"tcp4",
+				address,
+			)
 		},
 
-		// Принудительно HTTP/1.1
 		ForceAttemptHTTP2: false,
 
 		TLSClientConfig: &tls.Config{
 			MinVersion: tls.VersionTLS12,
-			NextProtos: []string{"http/1.1"},
+			NextProtos: []string{
+				"http/1.1",
+			},
 		},
 
-		TLSHandshakeTimeout:   15 * time.Second,
+		TLSHandshakeTimeout:   10 * time.Second,
 		ResponseHeaderTimeout: 30 * time.Second,
 		IdleConnTimeout:       30 * time.Second,
 	}
@@ -55,7 +60,10 @@ func NewClient() *Client {
 	}
 }
 
-func (c *Client) get(path string, result interface{}) error {
+func (c *Client) get(
+	path string,
+	result interface{},
+) error {
 	url := c.baseURL + path
 
 	req, err := http.NewRequest(
@@ -65,33 +73,95 @@ func (c *Client) get(path string, result interface{}) error {
 	)
 	if err != nil {
 		return fmt.Errorf(
-			"failed to create request: %w",
+			"create request: %w",
 			err,
 		)
 	}
 
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("User-Agent", "dota-bot-info/1.0")
+	req.Header.Set(
+		"Accept",
+		"application/json",
+	)
+
+	req.Header.Set(
+		"User-Agent",
+		"dota-bot-info/1.0",
+	)
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
+		if errors.Is(
+			err,
+			context.DeadlineExceeded,
+		) {
+			return fmt.Errorf(
+				"%w: %v",
+				ErrTimeout,
+				err,
+			)
+		}
+
+		var netErr net.Error
+
+		if errors.As(err, &netErr) &&
+			netErr.Timeout() {
+			return fmt.Errorf(
+				"%w: %v",
+				ErrTimeout,
+				err,
+			)
+		}
+
 		return fmt.Errorf(
-			"request failed: %w",
+			"%w: %v",
+			ErrUnavailable,
 			err,
 		)
 	}
-	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
+	defer func() {
+		_ = resp.Body.Close()
+	}()
+
+	switch {
+	case resp.StatusCode == http.StatusOK:
+		// всё хорошо
+
+	case resp.StatusCode == http.StatusNotFound:
 		return fmt.Errorf(
-			"OpenDota returned status: %d",
+			"%w: status %d",
+			ErrNotFound,
+			resp.StatusCode,
+		)
+
+	case resp.StatusCode == http.StatusTooManyRequests:
+		return fmt.Errorf(
+			"%w: status %d",
+			ErrRateLimited,
+			resp.StatusCode,
+		)
+
+	case resp.StatusCode >= 500:
+		return fmt.Errorf(
+			"%w: status %d",
+			ErrUnavailable,
+			resp.StatusCode,
+		)
+
+	default:
+		return fmt.Errorf(
+			"%w: status %d",
+			ErrBadResponse,
 			resp.StatusCode,
 		)
 	}
 
-	if err := json.NewDecoder(resp.Body).Decode(result); err != nil {
+	if err := json.NewDecoder(
+		resp.Body,
+	).Decode(result); err != nil {
 		return fmt.Errorf(
-			"failed to decode response: %w",
+			"%w: decode JSON: %v",
+			ErrBadResponse,
 			err,
 		)
 	}

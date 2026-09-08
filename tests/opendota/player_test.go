@@ -12,6 +12,7 @@ import (
 )
 
 func TestGetPlayer(t *testing.T) {
+	requireOpenDotaTests(t)
 	cute.NewTestBuilder().
 		Title("Get Dota player").
 		Description("OpenDota returns player information by account ID").
@@ -52,6 +53,7 @@ func TestGetPlayer(t *testing.T) {
 }
 
 func TestGetPlayerWinLoss(t *testing.T) {
+	requireOpenDotaTests(t)
 	cute.NewTestBuilder().
 		Title("Get player win loss").
 		Description(

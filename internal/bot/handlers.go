@@ -1,9 +1,8 @@
 package bot
 
 import (
-	"fmt"
+	"errors"
 	"log"
-	"strconv"
 	"strings"
 
 	"github.com/sadbag21/dota-bot-info/pkg/formatter"
@@ -62,36 +61,12 @@ func (b *Bot) handleUpdate(update tgbotapi.Update) {
 }
 
 func (b *Bot) handlePlayer(message *tgbotapi.Message) {
-	// Получаем аргументы команды.
-	args := message.CommandArguments()
+	accountID, ok := b.getDotaID(
+		message,
+		"player",
+	)
 
-	if args == "" {
-		b.sendMessage(
-			message.Chat.ID,
-			"❌ Укажи Dota ID.\n\nПример:\n<code>/player 123456789</code>",
-		)
-		return
-	}
-
-	// Убираем пробелы.
-	args = strings.TrimSpace(args)
-
-	// Проверяем, что ID состоит из числа.
-	accountID, err := strconv.ParseInt(args, 10, 64)
-	if err != nil {
-		b.sendMessage(
-			message.Chat.ID,
-			"❌ Dota ID должен быть числом.\n\nПример:\n<code>/player 123456789</code>",
-		)
-		return
-	}
-
-	// Dota ID не может быть отрицательным или нулём.
-	if accountID <= 0 {
-		b.sendMessage(
-			message.Chat.ID,
-			"❌ Dota ID должен быть положительным числом.",
-		)
+	if !ok {
 		return
 	}
 
@@ -100,8 +75,10 @@ func (b *Bot) handlePlayer(message *tgbotapi.Message) {
 		accountID,
 	)
 
-	// Запрашиваем игрока через Service.
-	playerInfo, err := b.service.GetPlayerInfo(accountID)
+	playerInfo, err := b.service.GetPlayerInfo(
+		accountID,
+	)
+
 	if err != nil {
 		log.Printf(
 			"Failed to get player %d: %v",
@@ -111,57 +88,29 @@ func (b *Bot) handlePlayer(message *tgbotapi.Message) {
 
 		b.sendMessage(
 			message.Chat.ID,
-			fmt.Sprintf(
-				"❌ Не удалось получить информацию об игроке.\n\nID: <code>%d</code>\n\nПопробуй ещё раз позже.",
-				accountID,
-			),
+			userErrorMessage(err),
 		)
 
 		return
 	}
 
-	// Формируем красивый текст.
-	text := formatter.FormatPlayer(playerInfo)
+	text := formatter.FormatPlayer(
+		playerInfo,
+	)
 
-	// Отправляем его пользователю.
-	b.sendMessage(message.Chat.ID, text)
+	b.sendMessage(
+		message.Chat.ID,
+		text,
+	)
 }
 
 func (b *Bot) handleMatches(message *tgbotapi.Message) {
-	args := strings.TrimSpace(
-		message.CommandArguments(),
+	accountID, ok := b.getDotaID(
+		message,
+		"matches",
 	)
 
-	if args == "" {
-		b.sendMessage(
-			message.Chat.ID,
-			"❌ Укажи Dota ID.\n\n"+
-				"Пример:\n"+
-				"<code>/matches 1677175114</code>",
-		)
-		return
-	}
-
-	accountID, err := strconv.ParseInt(
-		args,
-		10,
-		64,
-	)
-	if err != nil {
-		b.sendMessage(
-			message.Chat.ID,
-			"❌ Dota ID должен быть числом.\n\n"+
-				"Пример:\n"+
-				"<code>/matches 1677175114</code>",
-		)
-		return
-	}
-
-	if accountID <= 0 {
-		b.sendMessage(
-			message.Chat.ID,
-			"❌ Dota ID должен быть положительным числом.",
-		)
+	if !ok {
 		return
 	}
 
@@ -174,6 +123,7 @@ func (b *Bot) handleMatches(message *tgbotapi.Message) {
 		accountID,
 		10,
 	)
+
 	if err != nil {
 		log.Printf(
 			"Failed to get recent matches for %d: %v",
@@ -183,9 +133,9 @@ func (b *Bot) handleMatches(message *tgbotapi.Message) {
 
 		b.sendMessage(
 			message.Chat.ID,
-			"❌ Не удалось получить последние матчи.\n\n"+
-				"Попробуй ещё раз позже.",
+			userErrorMessage(err),
 		)
+
 		return
 	}
 
@@ -201,41 +151,12 @@ func (b *Bot) handleMatches(message *tgbotapi.Message) {
 }
 
 func (b *Bot) handleHeroes(message *tgbotapi.Message) {
-	args := strings.TrimSpace(
-		message.CommandArguments(),
+	accountID, ok := b.getDotaID(
+		message,
+		"heroes",
 	)
 
-	if args == "" {
-		b.sendMessage(
-			message.Chat.ID,
-			"❌ Укажи Dota ID.\n\n"+
-				"Пример:\n"+
-				"<code>/heroes 1677175114</code>",
-		)
-		return
-	}
-
-	accountID, err := strconv.ParseInt(
-		args,
-		10,
-		64,
-	)
-
-	if err != nil {
-		b.sendMessage(
-			message.Chat.ID,
-			"❌ Dota ID должен быть числом.\n\n"+
-				"Пример:\n"+
-				"<code>/heroes 1677175114</code>",
-		)
-		return
-	}
-
-	if accountID <= 0 {
-		b.sendMessage(
-			message.Chat.ID,
-			"❌ Dota ID должен быть положительным числом.",
-		)
+	if !ok {
 		return
 	}
 
@@ -258,8 +179,7 @@ func (b *Bot) handleHeroes(message *tgbotapi.Message) {
 
 		b.sendMessage(
 			message.Chat.ID,
-			"❌ Не удалось получить статистику героев.\n\n"+
-				"Попробуй ещё раз позже.",
+			userErrorMessage(err),
 		)
 
 		return
@@ -276,47 +196,13 @@ func (b *Bot) handleHeroes(message *tgbotapi.Message) {
 	)
 }
 
-func (b *Bot) handleStats(
-	message *tgbotapi.Message,
-) {
-	args := strings.TrimSpace(
-		message.CommandArguments(),
+func (b *Bot) handleStats(message *tgbotapi.Message) {
+	accountID, ok := b.getDotaID(
+		message,
+		"stats",
 	)
 
-	if args == "" {
-		b.sendMessage(
-			message.Chat.ID,
-			"❌ Укажи Dota ID.\n\n"+
-				"Пример:\n"+
-				"<code>/stats 1677175114</code>",
-		)
-
-		return
-	}
-
-	accountID, err := strconv.ParseInt(
-		args,
-		10,
-		64,
-	)
-
-	if err != nil {
-		b.sendMessage(
-			message.Chat.ID,
-			"❌ Dota ID должен быть числом.\n\n"+
-				"Пример:\n"+
-				"<code>/stats 1677175114</code>",
-		)
-
-		return
-	}
-
-	if accountID <= 0 {
-		b.sendMessage(
-			message.Chat.ID,
-			"❌ Dota ID должен быть положительным числом.",
-		)
-
+	if !ok {
 		return
 	}
 
@@ -338,8 +224,7 @@ func (b *Bot) handleStats(
 
 		b.sendMessage(
 			message.Chat.ID,
-			"❌ Не удалось получить статистику игрока.\n\n"+
-				"Попробуй ещё раз позже.",
+			userErrorMessage(err),
 		)
 
 		return
@@ -356,47 +241,13 @@ func (b *Bot) handleStats(
 	)
 }
 
-func (b *Bot) handleMatch(
-	message *tgbotapi.Message,
-) {
-	args := strings.TrimSpace(
-		message.CommandArguments(),
+func (b *Bot) handleMatch(message *tgbotapi.Message) {
+	matchID, ok := b.getMatchID(
+		message,
+		"match",
 	)
 
-	if args == "" {
-		b.sendMessage(
-			message.Chat.ID,
-			"❌ Укажи Match ID.\n\n"+
-				"Пример:\n"+
-				"<code>/match 8981896960</code>",
-		)
-
-		return
-	}
-
-	matchID, err := strconv.ParseInt(
-		args,
-		10,
-		64,
-	)
-
-	if err != nil {
-		b.sendMessage(
-			message.Chat.ID,
-			"❌ Match ID должен быть числом.\n\n"+
-				"Пример:\n"+
-				"<code>/match 8981896960</code>",
-		)
-
-		return
-	}
-
-	if matchID <= 0 {
-		b.sendMessage(
-			message.Chat.ID,
-			"❌ Match ID должен быть положительным числом.",
-		)
-
+	if !ok {
 		return
 	}
 
@@ -418,18 +269,15 @@ func (b *Bot) handleMatch(
 
 		b.sendMessage(
 			message.Chat.ID,
-			fmt.Sprintf(
-				"❌ Не удалось получить матч.\n\n"+
-					"Match ID: <code>%d</code>\n\n"+
-					"Проверь ID или попробуй позже.",
-				matchID,
-			),
+			userErrorMessage(err),
 		)
 
 		return
 	}
 
-	text := formatter.FormatMatch(match)
+	text := formatter.FormatMatch(
+		match,
+	)
 
 	b.sendMessage(
 		message.Chat.ID,
@@ -437,44 +285,13 @@ func (b *Bot) handleMatch(
 	)
 }
 
-func (b *Bot) handleImpact(
-	message *tgbotapi.Message,
-) {
-	args := strings.TrimSpace(
-		message.CommandArguments(),
+func (b *Bot) handleImpact(message *tgbotapi.Message) {
+	matchID, ok := b.getMatchID(
+		message,
+		"impact",
 	)
 
-	if args == "" {
-		b.sendMessage(
-			message.Chat.ID,
-			"❌ Укажи Match ID.\n\n"+
-				"Пример:\n"+
-				"<code>/impact 8983647546</code>",
-		)
-		return
-	}
-
-	matchID, err := strconv.ParseInt(
-		args,
-		10,
-		64,
-	)
-
-	if err != nil {
-		b.sendMessage(
-			message.Chat.ID,
-			"❌ Match ID должен быть числом.\n\n"+
-				"Пример:\n"+
-				"<code>/impact 8983647546</code>",
-		)
-		return
-	}
-
-	if matchID <= 0 {
-		b.sendMessage(
-			message.Chat.ID,
-			"❌ Match ID должен быть положительным числом.",
-		)
+	if !ok {
 		return
 	}
 
@@ -496,19 +313,88 @@ func (b *Bot) handleImpact(
 
 		b.sendMessage(
 			message.Chat.ID,
-			fmt.Sprintf(
-				"❌ Не удалось проанализировать матч.\n\n"+
-					"Match ID: <code>%d</code>",
-				matchID,
-			),
+			userErrorMessage(err),
 		)
+
 		return
 	}
 
-	text := formatter.FormatImpact(match)
+	text := formatter.FormatImpact(
+		match,
+	)
 
 	b.sendMessage(
 		message.Chat.ID,
 		text,
 	)
+}
+
+// getDotaID получает Dota ID из команды.
+// При ошибке сам отправляет сообщение пользователю.
+func (b *Bot) getDotaID(
+	message *tgbotapi.Message,
+	command string,
+) (int64, bool) {
+	accountID, err := parseDotaID(
+		message,
+	)
+
+	if err == nil {
+		return accountID, true
+	}
+
+	if errors.Is(err, errMissingID) {
+		b.sendMessage(
+			message.Chat.ID,
+			"❌ Укажи Dota ID.\n\n"+
+				"Пример:\n"+
+				"<code>/"+command+" 1677175114</code>",
+		)
+
+		return 0, false
+	}
+
+	b.sendMessage(
+		message.Chat.ID,
+		"❌ Некорректный Dota ID.\n\n"+
+			"Пример:\n"+
+			"<code>/"+command+" 1677175114</code>",
+	)
+
+	return 0, false
+}
+
+// getMatchID получает Match ID из команды.
+// При ошибке сам отправляет сообщение пользователю.
+func (b *Bot) getMatchID(
+	message *tgbotapi.Message,
+	command string,
+) (int64, bool) {
+	matchID, err := parseMatchID(
+		message,
+	)
+
+	if err == nil {
+		return matchID, true
+	}
+
+	if errors.Is(err, errMissingID) {
+		b.sendMessage(
+			message.Chat.ID,
+			"❌ Укажи Match ID.\n\n"+
+				"Пример:\n"+
+				"<code>/"+command+" 8983647546</code>",
+		)
+
+		return 0, false
+	}
+
+	b.sendMessage(
+		message.Chat.ID,
+		"❌ Некорректный Match ID.\n\n"+
+			"Пример:\n"+
+			"<code>/"+command+" 8983647546</code>",
+	)
+
+	return 0, false
 }
