@@ -30,7 +30,9 @@ func (b *Bot) handleHelp(message *tgbotapi.Message) {
 /player &lt;Dota ID&gt; — информация об игроке
 /matches &lt;Dota ID&gt; — последние матчи
 /heroes &lt;Dota ID&gt; — популярные герои
-/stats &lt;Dota ID&gt; — расширенная статистика`
+/stats &lt;Dota ID&gt; — расширенная статистика
+
+/match &lt;Match ID&gt; — подробности матча`
 
 	b.sendMessage(
 		message.Chat.ID,

@@ -51,3 +51,34 @@ type Total struct {
 	N     int     `json:"n"`
 	Sum   float64 `json:"sum"`
 }
+
+type Match struct {
+	MatchID    int64 `json:"match_id"`
+	Duration   int   `json:"duration"`
+	StartTime  int64 `json:"start_time"`
+	RadiantWin bool  `json:"radiant_win"`
+
+	Players []MatchPlayer `json:"players"`
+}
+
+type MatchPlayer struct {
+	AccountID  *int64 `json:"account_id"`
+	PlayerSlot int    `json:"player_slot"`
+	HeroID     int    `json:"hero_id"`
+
+	Personaname string `json:"personaname"`
+
+	Kills   int `json:"kills"`
+	Deaths  int `json:"deaths"`
+	Assists int `json:"assists"`
+
+	GoldPerMin int `json:"gold_per_min"`
+	XPPerMin   int `json:"xp_per_min"`
+	NetWorth   int `json:"net_worth"`
+
+	HeroDamage  int `json:"hero_damage"`
+	TowerDamage int `json:"tower_damage"`
+	HeroHealing int `json:"hero_healing"`
+	LastHits    int `json:"last_hits"`
+	Denies      int `json:"denies"`
+}

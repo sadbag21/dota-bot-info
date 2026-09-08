@@ -47,6 +47,9 @@ func (b *Bot) handleUpdate(update tgbotapi.Update) {
 	case "stats":
 		b.handleStats(message)
 
+	case "match":
+		b.handleMatch(message)
+
 	default:
 		b.sendMessage(
 			message.Chat.ID,
@@ -343,6 +346,87 @@ func (b *Bot) handleStats(
 		accountID,
 		stats,
 	)
+
+	b.sendMessage(
+		message.Chat.ID,
+		text,
+	)
+}
+
+func (b *Bot) handleMatch(
+	message *tgbotapi.Message,
+) {
+	args := strings.TrimSpace(
+		message.CommandArguments(),
+	)
+
+	if args == "" {
+		b.sendMessage(
+			message.Chat.ID,
+			"❌ Укажи Match ID.\n\n"+
+				"Пример:\n"+
+				"<code>/match 8981896960</code>",
+		)
+
+		return
+	}
+
+	matchID, err := strconv.ParseInt(
+		args,
+		10,
+		64,
+	)
+
+	if err != nil {
+		b.sendMessage(
+			message.Chat.ID,
+			"❌ Match ID должен быть числом.\n\n"+
+				"Пример:\n"+
+				"<code>/match 8981896960</code>",
+		)
+
+		return
+	}
+
+	if matchID <= 0 {
+		b.sendMessage(
+			message.Chat.ID,
+			"❌ Match ID должен быть положительным числом.",
+		)
+
+		return
+	}
+
+	log.Printf(
+		"Getting match information for match_id=%d",
+		matchID,
+	)
+
+	match, err := b.service.GetMatchDetails(
+		matchID,
+	)
+
+	if err != nil {
+		log.Printf(
+			"Failed to get match %d: %v",
+			matchID,
+			err,
+		)
+
+		b.sendMessage(
+			message.Chat.ID,
+			fmt.Sprintf(
+				"❌ Не удалось получить матч.\n\n"+
+					"Match ID: <code>%d</code>\n\n"+
+					"Проверь ID или попробуй позже.",
+				matchID,
+			),
+		)
+
+		return
+	}
+
+	text := formatter.FormatMatch(match)
 
 	b.sendMessage(
 		message.Chat.ID,
