@@ -81,4 +81,9 @@ type MatchPlayer struct {
 	HeroHealing int `json:"hero_healing"`
 	LastHits    int `json:"last_hits"`
 	Denies      int `json:"denies"`
+
+	Stuns                  float64 `json:"stuns"`
+	ObsPlaced              int     `json:"obs_placed"`
+	SenPlaced              int     `json:"sen_placed"`
+	TeamfightParticipation float64 `json:"teamfight_participation"`
 }

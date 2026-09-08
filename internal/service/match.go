@@ -39,6 +39,13 @@ type MatchPlayerInfo struct {
 
 	LastHits int
 	Denies   int
+
+	Stuns float64
+
+	ObsPlaced int
+	SenPlaced int
+
+	TeamfightParticipation float64
 }
 
 func (s *PlayerService) GetMatchDetails(
@@ -102,6 +109,13 @@ func (s *PlayerService) GetMatchDetails(
 
 			LastHits: player.LastHits,
 			Denies:   player.Denies,
+
+			Stuns: player.Stuns,
+
+			ObsPlaced: player.ObsPlaced,
+			SenPlaced: player.SenPlaced,
+
+			TeamfightParticipation: player.TeamfightParticipation,
 		}
 
 		if player.PlayerSlot < 128 {

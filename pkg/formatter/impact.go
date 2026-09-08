@@ -76,12 +76,17 @@ func FormatImpact(match *service.MatchDetails) string {
 
 		builder.WriteString(
 			fmt.Sprintf(
-				"\n%s %d. %s — %s — <b>%.1f</b> %s",
+				"\n%s %d. %s — %s — <b>%.1f</b> [%s] %s",
 				icon,
 				i+1,
-				html.EscapeString(player.HeroName),
-				html.EscapeString(player.Name),
+				html.EscapeString(
+					player.HeroName,
+				),
+				html.EscapeString(
+					player.Name,
+				),
 				player.Score,
+				player.Profile,
 				result,
 			),
 		)
@@ -96,20 +101,32 @@ func formatImpactDetails(
 ) string {
 	return fmt.Sprintf(
 		"\n\n%s: <b>%s</b> — %s\n"+
+			"🧩 Профиль: <b>%s</b>\n"+
 			"🎯 Итог: <b>%.1f / 100</b>\n\n"+
 			"├ ⚔️ KDA: +%.1f\n"+
 			"├ 🤝 Assists: +%.1f\n"+
 			"├ 💥 Hero Damage: +%.1f\n"+
 			"├ 🏰 Tower Damage: +%.1f\n"+
 			"├ ❤️ Healing: +%.1f\n"+
+			"├ 💫 Stuns: +%.1f\n"+
+			"├ 👁 Wards: +%.1f\n"+
+			"├ 👥 Participation: +%.1f\n"+
 			"├ 💰 GPM: +%.1f\n"+
 			"├ ✨ XPM: +%.1f\n"+
 			"├ 💵 Net Worth: +%.1f\n"+
 			"├ 🛡 Survival: +%.1f\n"+
 			"└ 🏆 Win: +%.1f",
 		title,
-		html.EscapeString(player.HeroName),
-		html.EscapeString(player.Name),
+
+		html.EscapeString(
+			player.HeroName,
+		),
+
+		html.EscapeString(
+			player.Name,
+		),
+
+		player.Profile,
 		player.Score,
 
 		player.KDAContribution,
@@ -117,6 +134,9 @@ func formatImpactDetails(
 		player.HeroDamageContribution,
 		player.TowerDamageContribution,
 		player.HealingContribution,
+		player.StunsContribution,
+		player.WardsContribution,
+		player.ParticipationContribution,
 		player.GPMContribution,
 		player.XPMContribution,
 		player.NetWorthContribution,
