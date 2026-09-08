@@ -12,6 +12,8 @@ type MatchDetails struct {
 
 	Radiant []MatchPlayerInfo
 	Dire    []MatchPlayerInfo
+
+	ImpactRanking []ImpactEntry
 }
 
 type MatchPlayerInfo struct {
@@ -131,11 +133,15 @@ func (s *PlayerService) GetMatchDetails(
 		},
 	)
 
-	return &MatchDetails{
+	details := &MatchDetails{
 		MatchID:    match.MatchID,
 		Duration:   match.Duration,
 		RadiantWin: match.RadiantWin,
 		Radiant:    radiant,
 		Dire:       dire,
-	}, nil
+	}
+
+	details.ImpactRanking = calculateImpactRanking(details)
+
+	return details, nil
 }

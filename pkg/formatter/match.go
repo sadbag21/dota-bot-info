@@ -9,9 +9,7 @@ import (
 	"github.com/sadbag21/dota-bot-info/internal/service"
 )
 
-func FormatMatch(
-	match *service.MatchDetails,
-) string {
+func FormatMatch(match *service.MatchDetails) string {
 	var builder strings.Builder
 
 	winner := "🔴 Dire"
@@ -55,6 +53,59 @@ func FormatMatch(
 				player,
 			),
 		)
+	}
+
+	if len(match.ImpactRanking) > 0 {
+		mvp := match.ImpactRanking[0]
+		lowest := match.ImpactRanking[len(match.ImpactRanking)-1]
+
+		builder.WriteString(
+			"\n\n📊 <b>IMPACT SCORE</b>",
+		)
+
+		builder.WriteString(
+			fmt.Sprintf(
+				"\n\n⭐ <b>MVP:</b> %s — %s — %.1f"+
+					"\n💀 <b>Lowest impact:</b> %s — %s — %.1f",
+				html.EscapeString(mvp.HeroName),
+				html.EscapeString(mvp.Name),
+				mvp.Score,
+
+				html.EscapeString(lowest.HeroName),
+				html.EscapeString(lowest.Name),
+				lowest.Score,
+			),
+		)
+
+		builder.WriteString(
+			"\n\n<b>Рейтинг:</b>",
+		)
+
+		for i, player := range match.ImpactRanking {
+			icon := "▫️"
+
+			switch i {
+			case 0:
+				icon = "🥇"
+
+			case 1:
+				icon = "🥈"
+
+			case 2:
+				icon = "🥉"
+			}
+
+			builder.WriteString(
+				fmt.Sprintf(
+					"\n%s %d. %s — %s — <b>%.1f</b>",
+					icon,
+					i+1,
+					html.EscapeString(player.HeroName),
+					html.EscapeString(player.Name),
+					player.Score,
+				),
+			)
+		}
 	}
 
 	matchURL := fmt.Sprintf(
