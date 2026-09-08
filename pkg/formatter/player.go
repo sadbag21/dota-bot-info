@@ -53,10 +53,40 @@ func FormatPlayer(info *service.PlayerInfo) string {
 		info.WinRate,
 	)
 
+	if len(info.RecentMatches) > 0 {
+		text += "\n\n⚔️ <b>Последние матчи</b>"
+
+		for i, match := range info.RecentMatches {
+			result := "🔴"
+
+			if match.Won {
+				result = "🟢"
+			}
+
+			heroName := html.EscapeString(
+				match.HeroName,
+			)
+
+			text += fmt.Sprintf(
+				"\n\n%d. %s <b>%s</b>\n"+
+					"   %d / %d / %d • %s",
+				i+1,
+				result,
+				heroName,
+				match.Kills,
+				match.Deaths,
+				match.Assists,
+				formatDuration(match.Duration),
+			)
+		}
+	}
+
 	if player.Profile.ProfileURL != "" {
 		text += fmt.Sprintf(
 			"\n\n🔗 <a href=\"%s\">Steam profile</a>",
-			html.EscapeString(player.Profile.ProfileURL),
+			html.EscapeString(
+				player.Profile.ProfileURL,
+			),
 		)
 	}
 
@@ -98,5 +128,16 @@ func formatRank(rankTier int) string {
 		"%s %d",
 		medalName,
 		star,
+	)
+}
+
+func formatDuration(seconds int) string {
+	minutes := seconds / 60
+	remainingSeconds := seconds % 60
+
+	return fmt.Sprintf(
+		"%d:%02d",
+		minutes,
+		remainingSeconds,
 	)
 }

@@ -29,7 +29,9 @@ func (b *Bot) handleHelp(message *tgbotapi.Message) {
 
 func (b *Bot) sendMessage(chatID int64, text string) {
 	msg := tgbotapi.NewMessage(chatID, text)
+
 	msg.ParseMode = tgbotapi.ModeHTML
+	msg.DisableWebPagePreview = true
 
 	_, err := b.api.Send(msg)
 	if err != nil {

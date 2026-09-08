@@ -31,3 +31,18 @@ func (c *Client) GetWinLoss(accountID int64) (*WinLoss, error) {
 
 	return &winLoss, nil
 }
+
+func (c *Client) GetRecentMatches(accountID int64) ([]RecentMatch, error) {
+	var matches []RecentMatch
+
+	err := c.get(
+		fmt.Sprintf("/players/%d/recentMatches", accountID),
+		&matches,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return matches, nil
+}
