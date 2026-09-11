@@ -16,6 +16,7 @@ const baseURL = "https://api.opendota.com/api"
 type Client struct {
 	httpClient *http.Client
 	baseURL    string
+	cache      *responseCache
 }
 
 func NewClient() *Client {
@@ -57,6 +58,7 @@ func NewClient() *Client {
 			Timeout:   40 * time.Second,
 		},
 		baseURL: baseURL,
+		cache:   newResponseCache(512, 16*1024*1024, time.Now),
 	}
 }
 

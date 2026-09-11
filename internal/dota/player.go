@@ -2,91 +2,40 @@ package dota
 
 import "fmt"
 
-func (c *Client) GetPlayer(
-	accountID int64,
-) (*Player, error) {
-	var player Player
-
-	err := c.get(
-		fmt.Sprintf(
-			"/players/%d",
-			accountID,
-		),
-		&player,
-	)
-
-	if err != nil {
-		return nil, err
-	}
-
-	if player.Profile.AccountID == 0 ||
-		(player.Profile.SteamID == "" && player.Profile.Personaname == "" && player.Profile.ProfileURL == "") {
-		return nil, fmt.Errorf(
-			"%w: player %d",
-			ErrNotFound,
-			accountID,
-		)
-	}
-
-	return &player, nil
+func (c *Client) GetPlayer(accountID int64) (*Player, error) {
+	return cachedGet[Player](c, fmt.Sprintf("/players/%d", accountID), playerCacheTTL, func(player *Player) error {
+		if player.Profile.AccountID == 0 ||
+			(player.Profile.SteamID == "" && player.Profile.Personaname == "" && player.Profile.ProfileURL == "") {
+			return fmt.Errorf("%w: player %d", ErrNotFound, accountID)
+		}
+		return nil
+	})
 }
 
 func (c *Client) GetWinLoss(accountID int64) (*WinLoss, error) {
-	var winLoss WinLoss
-
-	err := c.get(
-		fmt.Sprintf("/players/%d/wl", accountID),
-		&winLoss,
-	)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return &winLoss, nil
+	return cachedGet[WinLoss](c, fmt.Sprintf("/players/%d/wl", accountID), playerCacheTTL, nil)
 }
 
 func (c *Client) GetRecentMatches(accountID int64) ([]RecentMatch, error) {
-	var matches []RecentMatch
-
-	err := c.get(
-		fmt.Sprintf("/players/%d/recentMatches", accountID),
-		&matches,
-	)
-
+	result, err := cachedGet[[]RecentMatch](c, fmt.Sprintf("/players/%d/recentMatches", accountID), recentMatchesCacheTTL, nil)
 	if err != nil {
 		return nil, err
 	}
-
-	return matches, nil
+	return *result, nil
 }
 
 func (c *Client) GetPlayerHeroes(accountID int64) ([]PlayerHero, error) {
-	var heroes []PlayerHero
-
-	err := c.get(
-		fmt.Sprintf("/players/%d/heroes", accountID),
-		&heroes,
-	)
-
+	result, err := cachedGet[[]PlayerHero](c, fmt.Sprintf("/players/%d/heroes", accountID), playerCacheTTL, nil)
 	if err != nil {
 		return nil, err
 	}
-
-	return heroes, nil
+	return *result, nil
 }
 
 func (c *Client) GetTotals(accountID int64) ([]Total, error) {
-	var totals []Total
-
-	err := c.get(
-		fmt.Sprintf("/players/%d/totals", accountID),
-		&totals,
-	)
-
+	result, err := cachedGet[[]Total](c, fmt.Sprintf("/players/%d/totals", accountID), playerCacheTTL, nil)
 	if err != nil {
 		return nil, err
 	}
-
-	return totals, nil
+	return *result, nil
 }

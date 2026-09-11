@@ -3,16 +3,10 @@ package dota
 import "fmt"
 
 func (c *Client) GetMatch(matchID int64) (*Match, error) {
-	var match Match
-
-	err := c.get(
-		fmt.Sprintf("/matches/%d", matchID),
-		&match,
-	)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return &match, nil
+	return cachedGet[Match](c, fmt.Sprintf("/matches/%d", matchID), matchCacheTTL, func(match *Match) error {
+		if match.MatchID == 0 {
+			return fmt.Errorf("%w: match %d", ErrNotFound, matchID)
+		}
+		return nil
+	})
 }
