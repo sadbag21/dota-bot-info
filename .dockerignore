@@ -1,0 +1,14 @@
+**
+!Dockerfile
+!go.mod
+!go.sum
+!cmd/
+!cmd/**
+!internal/
+!internal/**
+!pkg/
+!pkg/**
+**/.env
+**/.env.*
+**/*.exe
+**/allure-results/**
