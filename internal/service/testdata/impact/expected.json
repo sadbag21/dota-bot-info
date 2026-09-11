@@ -1,0 +1,827 @@
+[
+  {
+    "MatchID": 8988485050,
+    "Ranking": [
+      {
+        "PlayerSlot": 129,
+        "Score": 81.7806159312383,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 130,
+        "Score": 79.25624875740826,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 132,
+        "Score": 36.559985053826516,
+        "Profile": "Hybrid"
+      },
+      {
+        "PlayerSlot": 1,
+        "Score": 33.00840227032247,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 131,
+        "Score": 29.621005631353313,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 128,
+        "Score": 28.73647072257286,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 2,
+        "Score": 20.003996234801438,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 3,
+        "Score": 18.5012860354651,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 0,
+        "Score": 15.486883373481772,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 4,
+        "Score": 5.620795210264662,
+        "Profile": "Core"
+      }
+    ]
+  },
+  {
+    "MatchID": 8988749358,
+    "Ranking": [
+      {
+        "PlayerSlot": 1,
+        "Score": 88.75341742604942,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 4,
+        "Score": 69.47679336841854,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 2,
+        "Score": 53.4916477765191,
+        "Profile": "Support"
+      },
+      {
+        "PlayerSlot": 0,
+        "Score": 44.130758476792025,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 131,
+        "Score": 38.19368308583019,
+        "Profile": "Support"
+      },
+      {
+        "PlayerSlot": 3,
+        "Score": 37.552453790368965,
+        "Profile": "Hybrid"
+      },
+      {
+        "PlayerSlot": 132,
+        "Score": 32.89103468358778,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 130,
+        "Score": 29.759842467104313,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 129,
+        "Score": 27.56186801216011,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 128,
+        "Score": 20.97790444501146,
+        "Profile": "Hybrid"
+      }
+    ]
+  },
+  {
+    "MatchID": 8988813233,
+    "Ranking": [
+      {
+        "PlayerSlot": 130,
+        "Score": 80.08073734349027,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 129,
+        "Score": 78.45352723449963,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 132,
+        "Score": 58.03953071814467,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 128,
+        "Score": 55.28520054704568,
+        "Profile": "Hybrid"
+      },
+      {
+        "PlayerSlot": 131,
+        "Score": 47.10668697799241,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 4,
+        "Score": 30.716457173286695,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 1,
+        "Score": 27.896271118742177,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 3,
+        "Score": 22.334485581094768,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 0,
+        "Score": 19.026305236176817,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 2,
+        "Score": 3.5923429559802287,
+        "Profile": "Core"
+      }
+    ]
+  },
+  {
+    "MatchID": 8988877908,
+    "Ranking": [
+      {
+        "PlayerSlot": 4,
+        "Score": 79.06172748011217,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 1,
+        "Score": 66.15682352285756,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 3,
+        "Score": 39.53124776306869,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 130,
+        "Score": 35.61806020356497,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 128,
+        "Score": 30.272628569498178,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 0,
+        "Score": 30.182470456318473,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 2,
+        "Score": 27.780156300997472,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 131,
+        "Score": 13.363390961019249,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 129,
+        "Score": 12.316123744097437,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 132,
+        "Score": 11.887057112090417,
+        "Profile": "Core"
+      }
+    ]
+  },
+  {
+    "MatchID": 8988968947,
+    "Ranking": [
+      {
+        "PlayerSlot": 129,
+        "Score": 74.28787448095446,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 131,
+        "Score": 70.98843860663501,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 1,
+        "Score": 41.29764697247754,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 132,
+        "Score": 40.458633740460535,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 0,
+        "Score": 24.806629969017898,
+        "Profile": "Hybrid"
+      },
+      {
+        "PlayerSlot": 3,
+        "Score": 24.70794176029948,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 130,
+        "Score": 19.74681653238556,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 4,
+        "Score": 19.720848675714496,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 2,
+        "Score": 15.757044783229292,
+        "Profile": "Hybrid"
+      },
+      {
+        "PlayerSlot": 128,
+        "Score": 14.202973966830962,
+        "Profile": "Core"
+      }
+    ]
+  },
+  {
+    "MatchID": 8989068021,
+    "Ranking": [
+      {
+        "PlayerSlot": 4,
+        "Score": 81.30819650085475,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 2,
+        "Score": 58.47355931457541,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 1,
+        "Score": 52.784931170686185,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 3,
+        "Score": 46.75962269381057,
+        "Profile": "Support"
+      },
+      {
+        "PlayerSlot": 129,
+        "Score": 38.91060736598068,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 0,
+        "Score": 34.313239683867046,
+        "Profile": "Hybrid"
+      },
+      {
+        "PlayerSlot": 132,
+        "Score": 30.931073816135278,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 130,
+        "Score": 23.265963445046125,
+        "Profile": "Hybrid"
+      },
+      {
+        "PlayerSlot": 131,
+        "Score": 18.624523977174032,
+        "Profile": "Hybrid"
+      },
+      {
+        "PlayerSlot": 128,
+        "Score": 14.65422292886406,
+        "Profile": "Hybrid"
+      }
+    ]
+  },
+  {
+    "MatchID": 8991846025,
+    "Ranking": [
+      {
+        "PlayerSlot": 128,
+        "Score": 86.30798559300231,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 132,
+        "Score": 50.88259993190022,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 2,
+        "Score": 46.79340059492481,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 129,
+        "Score": 41.37379715580056,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 130,
+        "Score": 40.55712452735169,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 131,
+        "Score": 33.0258953244981,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 3,
+        "Score": 29.367681865295253,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 1,
+        "Score": 22.616713981774915,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 0,
+        "Score": 16.198015295950952,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 4,
+        "Score": 4.974079616953106,
+        "Profile": "Core"
+      }
+    ]
+  },
+  {
+    "MatchID": 8991901584,
+    "Ranking": [
+      {
+        "PlayerSlot": 132,
+        "Score": 71.28822655106991,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 130,
+        "Score": 67.2471642764636,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 129,
+        "Score": 48.50033403683992,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 131,
+        "Score": 43.9639760695515,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 128,
+        "Score": 43.71543877975656,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 3,
+        "Score": 26.357869325014484,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 4,
+        "Score": 25.08960276251473,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 2,
+        "Score": 15.852915207281592,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 1,
+        "Score": 15.691455893294386,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 0,
+        "Score": 5.971197661139296,
+        "Profile": "Core"
+      }
+    ]
+  },
+  {
+    "MatchID": 8991978155,
+    "Ranking": [
+      {
+        "PlayerSlot": 131,
+        "Score": 80.94126450434916,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 130,
+        "Score": 64.11564348115266,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 129,
+        "Score": 57.42296139139839,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 2,
+        "Score": 50.16508580526471,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 132,
+        "Score": 40.35337316919405,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 128,
+        "Score": 34.797399328393325,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 1,
+        "Score": 30.738642672421502,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 3,
+        "Score": 27.747919149753333,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 0,
+        "Score": 24.51095728519825,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 4,
+        "Score": 21.88786022953708,
+        "Profile": "Core"
+      }
+    ]
+  },
+  {
+    "MatchID": 8992042904,
+    "Ranking": [
+      {
+        "PlayerSlot": 132,
+        "Score": 85.55561699974847,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 130,
+        "Score": 59.93066465290669,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 128,
+        "Score": 55.25004221193323,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 129,
+        "Score": 40.16584407259681,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 3,
+        "Score": 38.2359981306938,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 1,
+        "Score": 36.2068866906655,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 0,
+        "Score": 28.58950604915251,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 131,
+        "Score": 20.537757351475896,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 4,
+        "Score": 20.46491575404034,
+        "Profile": "Hybrid"
+      },
+      {
+        "PlayerSlot": 2,
+        "Score": 11.753225058300735,
+        "Profile": "Core"
+      }
+    ]
+  },
+  {
+    "MatchID": 8992196498,
+    "Ranking": [
+      {
+        "PlayerSlot": 4,
+        "Score": 83.93110186475471,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 1,
+        "Score": 68.17259141814044,
+        "Profile": "Hybrid"
+      },
+      {
+        "PlayerSlot": 3,
+        "Score": 64.22635803452854,
+        "Profile": "Support"
+      },
+      {
+        "PlayerSlot": 2,
+        "Score": 52.371625920668066,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 131,
+        "Score": 37.35005721840877,
+        "Profile": "Support"
+      },
+      {
+        "PlayerSlot": 0,
+        "Score": 35.127043145906626,
+        "Profile": "Hybrid"
+      },
+      {
+        "PlayerSlot": 132,
+        "Score": 28.083092632223877,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 129,
+        "Score": 26.32427613626184,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 128,
+        "Score": 16.453689296031975,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 130,
+        "Score": 10.175310262723906,
+        "Profile": "Hybrid"
+      }
+    ]
+  },
+  {
+    "MatchID": 8992218434,
+    "Ranking": [
+      {
+        "PlayerSlot": 0,
+        "Score": 78.56675551430392,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 4,
+        "Score": 64.72635458717735,
+        "Profile": "Hybrid"
+      },
+      {
+        "PlayerSlot": 3,
+        "Score": 50.880559224917754,
+        "Profile": "Support"
+      },
+      {
+        "PlayerSlot": 2,
+        "Score": 46.10960378419424,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 1,
+        "Score": 42.90185242021188,
+        "Profile": "Support"
+      },
+      {
+        "PlayerSlot": 128,
+        "Score": 40.09024723123916,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 131,
+        "Score": 37.78956658860123,
+        "Profile": "Hybrid"
+      },
+      {
+        "PlayerSlot": 130,
+        "Score": 27.01113979096558,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 132,
+        "Score": 21.126302534733014,
+        "Profile": "Hybrid"
+      },
+      {
+        "PlayerSlot": 129,
+        "Score": 20.502087553664996,
+        "Profile": "Hybrid"
+      }
+    ]
+  },
+  {
+    "MatchID": 8992269821,
+    "Ranking": [
+      {
+        "PlayerSlot": 1,
+        "Score": 89.33333333333333,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 4,
+        "Score": 56.265917987459815,
+        "Profile": "Support"
+      },
+      {
+        "PlayerSlot": 128,
+        "Score": 44.66096252485417,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 2,
+        "Score": 41.95188573634239,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 3,
+        "Score": 39.56353371929368,
+        "Profile": "Hybrid"
+      },
+      {
+        "PlayerSlot": 0,
+        "Score": 33.82408989546896,
+        "Profile": "Hybrid"
+      },
+      {
+        "PlayerSlot": 131,
+        "Score": 31.0110319706852,
+        "Profile": "Support"
+      },
+      {
+        "PlayerSlot": 132,
+        "Score": 19.946877449476784,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 129,
+        "Score": 15.058719422456075,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 130,
+        "Score": 12.749208444804742,
+        "Profile": "Hybrid"
+      }
+    ]
+  },
+  {
+    "MatchID": 8992284302,
+    "Ranking": [
+      {
+        "PlayerSlot": 129,
+        "Score": 72.42537220388398,
+        "Profile": "Hybrid"
+      },
+      {
+        "PlayerSlot": 130,
+        "Score": 71.6080713937582,
+        "Profile": "Hybrid"
+      },
+      {
+        "PlayerSlot": 128,
+        "Score": 64.42182167879861,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 131,
+        "Score": 54.27238639818981,
+        "Profile": "Support"
+      },
+      {
+        "PlayerSlot": 0,
+        "Score": 40.0115472636576,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 132,
+        "Score": 34.73649243916697,
+        "Profile": "Hybrid"
+      },
+      {
+        "PlayerSlot": 1,
+        "Score": 29.62991752916802,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 4,
+        "Score": 28.534222638252047,
+        "Profile": "Support"
+      },
+      {
+        "PlayerSlot": 3,
+        "Score": 15.482373385734052,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 2,
+        "Score": 11.653069915115319,
+        "Profile": "Core"
+      }
+    ]
+  },
+  {
+    "MatchID": 8992390628,
+    "Ranking": [
+      {
+        "PlayerSlot": 0,
+        "Score": 74.67083574786491,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 4,
+        "Score": 52.6226964066255,
+        "Profile": "Hybrid"
+      },
+      {
+        "PlayerSlot": 1,
+        "Score": 50.20843081963677,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 2,
+        "Score": 37.93261233116738,
+        "Profile": "Support"
+      },
+      {
+        "PlayerSlot": 132,
+        "Score": 34.07150837283995,
+        "Profile": "Hybrid"
+      },
+      {
+        "PlayerSlot": 3,
+        "Score": 33.35404642056557,
+        "Profile": "Support"
+      },
+      {
+        "PlayerSlot": 128,
+        "Score": 32.241193996947686,
+        "Profile": "Core"
+      },
+      {
+        "PlayerSlot": 131,
+        "Score": 26.153923566909825,
+        "Profile": "Hybrid"
+      },
+      {
+        "PlayerSlot": 130,
+        "Score": 18.622348468026754,
+        "Profile": "Hybrid"
+      },
+      {
+        "PlayerSlot": 129,
+        "Score": 11.343240762570716,
+        "Profile": "Hybrid"
+      }
+    ]
+  }
+]

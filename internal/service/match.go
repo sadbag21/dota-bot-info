@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"github.com/sadbag21/dota-bot-info/internal/dota"
 	"sort"
 )
 
@@ -14,6 +15,7 @@ type MatchDetails struct {
 	Dire    []MatchPlayerInfo
 
 	ImpactRanking []ImpactEntry
+	ImpactLimited bool
 }
 
 type MatchPlayerInfo struct {
@@ -67,6 +69,10 @@ func (s *PlayerService) GetMatchDetails(
 		)
 	}
 
+	return buildMatchDetails(match, heroNames), nil
+}
+
+func buildMatchDetails(match *dota.Match, heroNames map[int]string) *MatchDetails {
 	radiant := make([]MatchPlayerInfo, 0, 5)
 	dire := make([]MatchPlayerInfo, 0, 5)
 
@@ -148,14 +154,15 @@ func (s *PlayerService) GetMatchDetails(
 	)
 
 	details := &MatchDetails{
-		MatchID:    match.MatchID,
-		Duration:   match.Duration,
-		RadiantWin: match.RadiantWin,
-		Radiant:    radiant,
-		Dire:       dire,
+		ImpactLimited: match.Version == nil,
+		MatchID:       match.MatchID,
+		Duration:      match.Duration,
+		RadiantWin:    match.RadiantWin,
+		Radiant:       radiant,
+		Dire:          dire,
 	}
 
 	details.ImpactRanking = calculateImpactRanking(details)
 
-	return details, nil
+	return details
 }

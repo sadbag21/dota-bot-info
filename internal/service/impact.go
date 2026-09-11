@@ -41,6 +41,8 @@ type impactCandidate struct {
 func calculateImpactRanking(
 	match *MatchDetails,
 ) []ImpactEntry {
+	coreWeights, supportWeights := defaultImpactWeights()
+
 	candidates := make(
 		[]impactCandidate,
 		0,
@@ -282,133 +284,55 @@ func calculateImpactRanking(
 			winScore = 1
 		}
 
-		/*
-			CORE weights:
-
-			KDA           17%
-			Assists        4%
-			Hero Damage   22%
-			Tower Damage  14%
-			Healing        1%
-			Stuns          2%
-			Wards          0%
-			Participation  6%
-			GPM           10%
-			XPM            7%
-			Net Worth      8%
-			Survival       4%
-			Win            5%
-
-			SUPPORT weights:
-
-			KDA           10%
-			Assists       13%
-			Hero Damage    8%
-			Tower Damage   3%
-			Healing       10%
-			Stuns         14%
-			Wards         12%
-			Participation 14%
-			GPM            2%
-			XPM            3%
-			Net Worth      2%
-			Survival       4%
-			Win            5%
-		*/
-
 		kdaContribution :=
 			kdaScore *
-				blendWeight(
-					0.17,
-					0.10,
-					supportFactor,
-				) * 100
+				blendWeight(coreWeights.KDA, supportWeights.KDA, supportFactor) * 100
 
 		assistsContribution :=
 			assistsScore *
-				blendWeight(
-					0.04,
-					0.13,
-					supportFactor,
-				) * 100
+				blendWeight(coreWeights.Assists, supportWeights.Assists, supportFactor) * 100
 
 		heroDamageContribution :=
 			heroDamageScore *
-				blendWeight(
-					0.22,
-					0.08,
-					supportFactor,
-				) * 100
+				blendWeight(coreWeights.HeroDamage, supportWeights.HeroDamage, supportFactor) * 100
 
 		towerDamageContribution :=
 			towerDamageScore *
-				blendWeight(
-					0.14,
-					0.03,
-					supportFactor,
-				) * 100
+				blendWeight(coreWeights.TowerDamage, supportWeights.TowerDamage, supportFactor) * 100
 
 		healingContribution :=
 			healingScore *
-				blendWeight(
-					0.01,
-					0.10,
-					supportFactor,
-				) * 100
+				blendWeight(coreWeights.Healing, supportWeights.Healing, supportFactor) * 100
 
 		stunsContribution :=
 			stunsScore *
-				blendWeight(
-					0.02,
-					0.14,
-					supportFactor,
-				) * 100
+				blendWeight(coreWeights.Stuns, supportWeights.Stuns, supportFactor) * 100
 
 		wardsContribution :=
 			wardsScore *
-				blendWeight(
-					0.00,
-					0.12,
-					supportFactor,
-				) * 100
+				blendWeight(coreWeights.Wards, supportWeights.Wards, supportFactor) * 100
 
 		participationContribution :=
 			participationScore *
-				blendWeight(
-					0.06,
-					0.14,
-					supportFactor,
-				) * 100
+				blendWeight(coreWeights.Participation, supportWeights.Participation, supportFactor) * 100
 
 		gpmContribution :=
 			gpmScore *
-				blendWeight(
-					0.10,
-					0.02,
-					supportFactor,
-				) * 100
+				blendWeight(coreWeights.GPM, supportWeights.GPM, supportFactor) * 100
 
 		xpmContribution :=
 			xpmScore *
-				blendWeight(
-					0.07,
-					0.03,
-					supportFactor,
-				) * 100
+				blendWeight(coreWeights.XPM, supportWeights.XPM, supportFactor) * 100
 
 		netWorthContribution :=
 			netWorthScore *
-				blendWeight(
-					0.08,
-					0.02,
-					supportFactor,
-				) * 100
+				blendWeight(coreWeights.NetWorth, supportWeights.NetWorth, supportFactor) * 100
 
 		survivalContribution :=
-			survivalScore * 0.04 * 100
+			survivalScore * blendWeight(coreWeights.Survival, supportWeights.Survival, supportFactor) * 100
 
 		winContribution :=
-			winScore * 0.05 * 100
+			winScore * blendWeight(coreWeights.Win, supportWeights.Win, supportFactor) * 100
 
 		score :=
 			kdaContribution +

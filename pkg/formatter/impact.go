@@ -36,6 +36,9 @@ func FormatImpact(match *service.MatchDetails) string {
 	)
 
 	mvp := match.ImpactRanking[0]
+	if match.ImpactLimited {
+		builder.WriteString(impactLimitedNotice)
+	}
 	lowest := match.ImpactRanking[len(match.ImpactRanking)-1]
 
 	builder.WriteString(
@@ -94,6 +97,8 @@ func FormatImpact(match *service.MatchDetails) string {
 
 	return builder.String()
 }
+
+const impactLimitedNotice = "\n\n⚠️ <b>Предварительная оценка.</b> OpenDota ещё не разобрал матч: вклад через варды и контроль может быть недооценён."
 
 func formatImpactDetails(
 	title string,

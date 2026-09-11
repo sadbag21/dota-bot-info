@@ -54,6 +54,7 @@ type Total struct {
 }
 
 type Match struct {
+	Version    *int  `json:"version"`
 	MatchID    int64 `json:"match_id"`
 	Duration   int   `json:"duration"`
 	StartTime  int64 `json:"start_time"`

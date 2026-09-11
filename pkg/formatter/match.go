@@ -56,6 +56,9 @@ func FormatMatch(match *service.MatchDetails) string {
 	}
 
 	if len(match.ImpactRanking) > 0 {
+		if match.ImpactLimited {
+			builder.WriteString(impactLimitedNotice)
+		}
 		mvp := match.ImpactRanking[0]
 		lowest := match.ImpactRanking[len(match.ImpactRanking)-1]
 
