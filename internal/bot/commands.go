@@ -14,7 +14,9 @@ func (b *Bot) handleStart(message *tgbotapi.Message) {
 ⚔️ /matches &lt;Dota ID&gt;
 🦸 /heroes &lt;Dota ID&gt;
 📈 /stats &lt;Dota ID&gt;
-📚 /help`
+📚 /help
+
+Начни с /player и Dota ID. После выбора игрока команды /matches, /heroes и /stats работают без ID.`
 
 	b.sendMessage(
 		message.Chat.ID,
@@ -29,10 +31,12 @@ func (b *Bot) handleHelp(message *tgbotapi.Message) {
 /help — помощь
 
 👤 <b>Игрок</b>
-/player &lt;Dota ID&gt; — информация об игроке
-/matches &lt;Dota ID&gt; — последние матчи
-/heroes &lt;Dota ID&gt; — популярные герои
-/stats &lt;Dota ID&gt; — расширенная статистика
+/player [Dota ID] — выбрать игрока или показать выбранного
+/matches [Dota ID] — последние матчи
+/heroes [Dota ID] — популярные герои
+/stats [Dota ID] — расширенная статистика
+
+После успешного /player ID можно не повторять. Выбор личный для каждого участника чата и сбрасывается при перезапуске бота.
 
 🏟 <b>Матч</b>
 /match &lt;Match ID&gt; — подробности матча

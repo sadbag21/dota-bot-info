@@ -9,7 +9,7 @@ func (b *Bot) getDotaID(
 	message *tgbotapi.Message,
 	command string,
 ) (int64, bool) {
-	accountID, err := parseDotaID(
+	accountID, err := b.resolveDotaID(
 		message,
 	)
 
@@ -20,7 +20,7 @@ func (b *Bot) getDotaID(
 	if errors.Is(err, errMissingID) {
 		b.sendMessage(
 			message.Chat.ID,
-			"❌ Укажи Dota ID.\n\n"+
+			"❌ Сначала выбери игрока через /player или укажи Dota ID в команде.\n\n"+
 				"Пример:\n"+
 				"<code>/"+command+" 1677175114</code>",
 		)

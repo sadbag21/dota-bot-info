@@ -27,9 +27,13 @@ func (b *Bot) handlePlayer(message *tgbotapi.Message) {
 		return
 	}
 
+	b.rememberPlayer(message, accountID)
 	text := formatter.FormatPlayer(
 		playerInfo,
 	)
+	if _, ok := selectionKey(message); ok {
+		text += "\n\n✅ Игрок выбран. Теперь /matches, /heroes и /stats работают без ID."
+	}
 
 	b.sendMessage(message.Chat.ID, text, playerKeyboard(accountID))
 }

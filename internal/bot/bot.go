@@ -13,10 +13,11 @@ import (
 )
 
 type Bot struct {
-	api        *tgbotapi.BotAPI
-	service    *service.PlayerService
-	ctx        context.Context
-	httpClient *http.Client
+	api             *tgbotapi.BotAPI
+	service         playerService
+	selectedPlayers playerSelections
+	ctx             context.Context
+	httpClient      *http.Client
 }
 
 func New(ctx context.Context, cfg config.Config, playerService *service.PlayerService) (*Bot, error) {
