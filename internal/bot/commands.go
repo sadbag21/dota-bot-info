@@ -2,6 +2,7 @@ package bot
 
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"log"
 )
 
 func (b *Bot) handleStart(message *tgbotapi.Message) {
@@ -35,7 +36,10 @@ func (b *Bot) handleHelp(message *tgbotapi.Message) {
 
 🏟 <b>Матч</b>
 /match &lt;Match ID&gt; — подробности матча
-/impact &lt;Match ID&gt; — оценка полезности игроков`
+/impact &lt;Match ID&gt; — оценка полезности игроков
+
+Под профилем игрока есть кнопки перехода к матчам, героям и статистике.
+Под матчем — кнопки Impact и OpenDota. Повторно вводить ID не нужно.`
 
 	b.sendMessage(
 		message.Chat.ID,
@@ -43,14 +47,18 @@ func (b *Bot) handleHelp(message *tgbotapi.Message) {
 	)
 }
 
-func (b *Bot) sendMessage(chatID int64, text string) {
+func (b *Bot) sendMessage(chatID int64, text string, keyboards ...tgbotapi.InlineKeyboardMarkup) {
 	msg := tgbotapi.NewMessage(chatID, text)
 
 	msg.ParseMode = tgbotapi.ModeHTML
 	msg.DisableWebPagePreview = true
+	if len(keyboards) > 0 {
+		msg.ReplyMarkup = keyboards[0]
+	}
 
 	_, err := b.api.Send(msg)
 	if err != nil {
+		log.Printf("Failed to send message to chat_id=%d: %v", chatID, err)
 		return
 	}
 }

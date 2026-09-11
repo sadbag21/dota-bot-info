@@ -7,6 +7,10 @@ import (
 )
 
 func (b *Bot) handleUpdate(update tgbotapi.Update) {
+	if update.CallbackQuery != nil {
+		b.handleCallback(update.CallbackQuery)
+		return
+	}
 	if update.Message == nil || update.Message.Chat == nil {
 		return
 	}
