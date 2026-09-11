@@ -8,6 +8,7 @@ type Player struct {
 }
 
 type Profile struct {
+	SteamID      string `json:"steamid"`
 	AccountID    int64  `json:"account_id"`
 	Personaname  string `json:"personaname"`
 	Name         string `json:"name"`

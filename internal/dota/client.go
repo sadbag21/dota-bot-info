@@ -90,33 +90,7 @@ func (c *Client) get(
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		if errors.Is(
-			err,
-			context.DeadlineExceeded,
-		) {
-			return fmt.Errorf(
-				"%w: %v",
-				ErrTimeout,
-				err,
-			)
-		}
-
-		var netErr net.Error
-
-		if errors.As(err, &netErr) &&
-			netErr.Timeout() {
-			return fmt.Errorf(
-				"%w: %v",
-				ErrTimeout,
-				err,
-			)
-		}
-
-		return fmt.Errorf(
-			"%w: %v",
-			ErrUnavailable,
-			err,
-		)
+		return classifyResponseError(err, ErrUnavailable)
 	}
 
 	defer func() {
@@ -159,12 +133,17 @@ func (c *Client) get(
 	if err := json.NewDecoder(
 		resp.Body,
 	).Decode(result); err != nil {
-		return fmt.Errorf(
-			"%w: decode JSON: %v",
-			ErrBadResponse,
-			err,
-		)
+		return fmt.Errorf("decode JSON: %w", classifyResponseError(err, ErrBadResponse))
 	}
 
 	return nil
+}
+
+// Timeouts can occur both before headers arrive and while reading the body.
+func classifyResponseError(err, fallback error) error {
+	var netErr net.Error
+	if errors.Is(err, context.DeadlineExceeded) || (errors.As(err, &netErr) && netErr.Timeout()) {
+		return fmt.Errorf("%w: %w", ErrTimeout, err)
+	}
+	return fmt.Errorf("%w: %w", fallback, err)
 }

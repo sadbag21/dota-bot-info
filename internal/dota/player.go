@@ -19,7 +19,8 @@ func (c *Client) GetPlayer(
 		return nil, err
 	}
 
-	if player.Profile.AccountID == 0 {
+	if player.Profile.AccountID == 0 ||
+		(player.Profile.SteamID == "" && player.Profile.Personaname == "" && player.Profile.ProfileURL == "") {
 		return nil, fmt.Errorf(
 			"%w: player %d",
 			ErrNotFound,
