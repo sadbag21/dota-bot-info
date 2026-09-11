@@ -3,7 +3,7 @@ package bot
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/sadbag21/dota-bot-info/pkg/formatter"
-	"log"
+	"log/slog"
 )
 
 func (b *Bot) handleMatch(message *tgbotapi.Message) {
@@ -16,10 +16,7 @@ func (b *Bot) handleMatch(message *tgbotapi.Message) {
 		return
 	}
 
-	log.Printf(
-		"Getting match information for match_id=%d",
-		matchID,
-	)
+	slog.Debug("Getting match information", "match_id", matchID)
 
 	match, err := b.service.GetMatchDetails(
 		matchID,
@@ -47,10 +44,7 @@ func (b *Bot) handleImpact(message *tgbotapi.Message) {
 		return
 	}
 
-	log.Printf(
-		"Getting impact analysis for match_id=%d",
-		matchID,
-	)
+	slog.Debug("Getting impact analysis", "match_id", matchID)
 
 	match, err := b.service.GetMatchDetails(
 		matchID,

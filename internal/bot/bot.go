@@ -1,46 +1,83 @@
 package bot
 
 import (
-	"log"
-
-	"github.com/sadbag21/dota-bot-info/internal/config"
-	"github.com/sadbag21/dota-bot-info/internal/service"
+	"context"
+	"fmt"
+	"log/slog"
+	"net/http"
+	"time"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/sadbag21/dota-bot-info/internal/config"
+	"github.com/sadbag21/dota-bot-info/internal/service"
 )
 
 type Bot struct {
-	api     *tgbotapi.BotAPI
-	service *service.PlayerService
+	api        *tgbotapi.BotAPI
+	service    *service.PlayerService
+	ctx        context.Context
+	httpClient *http.Client
 }
 
-func New(
-	cfg config.Config,
-	playerService *service.PlayerService,
-) *Bot {
-	api, err := tgbotapi.NewBotAPI(cfg.TelegramBotToken)
+func New(ctx context.Context, cfg config.Config, playerService *service.PlayerService) (*Bot, error) {
+	client := &http.Client{Timeout: 40 * time.Second}
+	api, err := tgbotapi.NewBotAPIWithClient(cfg.TelegramBotToken, tgbotapi.APIEndpoint, contextHTTPClient{ctx: ctx, client: client})
 	if err != nil {
-		log.Fatal(err)
+		client.CloseIdleConnections()
+		return nil, fmt.Errorf("authorize Telegram bot: %w", safeTelegramError(err))
 	}
-
-	log.Printf(
-		"Authorized on account %s",
-		api.Self.UserName,
-	)
-
-	return &Bot{
-		api:     api,
-		service: playerService,
-	}
+	slog.Info("Telegram bot authorized", "username", api.Self.UserName)
+	return &Bot{api: api, service: playerService, ctx: ctx, httpClient: client}, nil
 }
 
 func (b *Bot) Run() {
-	updateConfig := tgbotapi.NewUpdate(0)
-	updateConfig.Timeout = 30
-
-	updates := b.api.GetUpdatesChan(updateConfig)
-
-	for update := range updates {
-		b.handleUpdate(update)
+	ctx := b.ctx
+	if ctx == nil {
+		ctx = context.Background()
 	}
+	if b.httpClient != nil {
+		defer b.httpClient.CloseIdleConnections()
+	}
+	updates := tgbotapi.NewUpdate(0)
+	updates.Timeout = 30
+	slog.Info("Bot started")
+	defer slog.Info("Bot stopped")
+	for ctx.Err() == nil {
+		batch, err := b.api.GetUpdates(updates)
+		if err != nil {
+			if ctx.Err() != nil {
+				return
+			}
+			slog.Error("Telegram polling failed", "error", safeTelegramError(err))
+			timer := time.NewTimer(3 * time.Second)
+			select {
+			case <-ctx.Done():
+				timer.Stop()
+				return
+			case <-timer.C:
+			}
+			continue
+		}
+		for _, update := range batch {
+			if ctx.Err() != nil {
+				return
+			}
+			if update.UpdateID < updates.Offset {
+				continue
+			}
+			b.handleUpdate(update)
+			updates.Offset = update.UpdateID + 1
+		}
+	}
+}
+
+// Telegram creates requests with a background context. Bind them to the
+// application's lifetime before http.Client applies its request timeout.
+type contextHTTPClient struct {
+	ctx    context.Context
+	client *http.Client
+}
+
+func (c contextHTTPClient) Do(req *http.Request) (*http.Response, error) {
+	return c.client.Do(req.Clone(c.ctx))
 }

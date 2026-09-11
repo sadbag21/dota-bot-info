@@ -2,7 +2,7 @@ package bot
 
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"log"
+	"log/slog"
 )
 
 func (b *Bot) handleStart(message *tgbotapi.Message) {
@@ -48,6 +48,9 @@ func (b *Bot) handleHelp(message *tgbotapi.Message) {
 }
 
 func (b *Bot) sendMessage(chatID int64, text string, keyboards ...tgbotapi.InlineKeyboardMarkup) {
+	if b.ctx != nil && b.ctx.Err() != nil {
+		return
+	}
 	msg := tgbotapi.NewMessage(chatID, text)
 
 	msg.ParseMode = tgbotapi.ModeHTML
@@ -58,7 +61,7 @@ func (b *Bot) sendMessage(chatID int64, text string, keyboards ...tgbotapi.Inlin
 
 	_, err := b.api.Send(msg)
 	if err != nil {
-		log.Printf("Failed to send message to chat_id=%d: %v", chatID, err)
+		slog.Error("Failed to send message", "chat_id", chatID, "error", safeTelegramError(err))
 		return
 	}
 }

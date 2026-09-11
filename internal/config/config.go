@@ -1,29 +1,33 @@
 package config
 
 import (
-	"log"
+	"errors"
+	"fmt"
+	"log/slog"
 	"os"
+	"strings"
 
 	"github.com/joho/godotenv"
 )
 
 type Config struct {
 	TelegramBotToken string
+	LogLevel         slog.Level
 }
 
-func Load() Config {
-	err := godotenv.Load()
-	if err != nil {
-		log.Println("Warning: .env file not found")
+func Load() (Config, error) {
+	if err := godotenv.Load(); err != nil && !errors.Is(err, os.ErrNotExist) {
+		return Config{}, fmt.Errorf("load .env: %w", err)
 	}
-
-	token := os.Getenv("TELEGRAM_BOT_TOKEN")
-
+	token := strings.TrimSpace(os.Getenv("TELEGRAM_BOT_TOKEN"))
 	if token == "" {
-		log.Fatal("TELEGRAM_BOT_TOKEN is not set")
+		return Config{}, errors.New("TELEGRAM_BOT_TOKEN is not set")
 	}
-
-	return Config{
-		TelegramBotToken: token,
+	var level slog.Level
+	if value := strings.TrimSpace(os.Getenv("LOG_LEVEL")); value != "" {
+		if err := level.UnmarshalText([]byte(value)); err != nil {
+			return Config{}, fmt.Errorf("invalid LOG_LEVEL: %w", err)
+		}
 	}
+	return Config{TelegramBotToken: token, LogLevel: level}, nil
 }

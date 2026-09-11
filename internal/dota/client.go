@@ -17,9 +17,14 @@ type Client struct {
 	httpClient *http.Client
 	baseURL    string
 	cache      *responseCache
+	ctx        context.Context
 }
 
 func NewClient() *Client {
+	return NewClientWithContext(context.Background())
+}
+
+func NewClientWithContext(ctx context.Context) *Client {
 	dialer := &net.Dialer{
 		Timeout:   10 * time.Second,
 		KeepAlive: 30 * time.Second,
@@ -53,6 +58,7 @@ func NewClient() *Client {
 	}
 
 	return &Client{
+		ctx: ctx,
 		httpClient: &http.Client{
 			Transport: transport,
 			Timeout:   40 * time.Second,
@@ -68,7 +74,12 @@ func (c *Client) get(
 ) error {
 	url := c.baseURL + path
 
-	req, err := http.NewRequest(
+	ctx := c.ctx
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	req, err := http.NewRequestWithContext(
+		ctx,
 		http.MethodGet,
 		url,
 		nil,
@@ -143,9 +154,16 @@ func (c *Client) get(
 
 // Timeouts can occur both before headers arrive and while reading the body.
 func classifyResponseError(err, fallback error) error {
+	if errors.Is(err, context.Canceled) {
+		return err
+	}
 	var netErr net.Error
 	if errors.Is(err, context.DeadlineExceeded) || (errors.As(err, &netErr) && netErr.Timeout()) {
 		return fmt.Errorf("%w: %w", ErrTimeout, err)
 	}
 	return fmt.Errorf("%w: %w", fallback, err)
+}
+
+func (c *Client) Close() {
+	c.httpClient.CloseIdleConnections()
 }

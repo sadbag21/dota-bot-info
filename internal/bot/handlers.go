@@ -2,8 +2,9 @@ package bot
 
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"log"
+	"log/slog"
 	"strings"
+	"time"
 )
 
 func (b *Bot) handleUpdate(update tgbotapi.Update) {
@@ -17,14 +18,18 @@ func (b *Bot) handleUpdate(update tgbotapi.Update) {
 
 	message := update.Message
 
-	if message.From != nil {
-		log.Printf("Message from %s: %s", message.From.UserName, message.Text)
-	}
-
 	if !message.IsCommand() {
 		return
 	}
 
+	started := time.Now()
+	defer func() {
+		userID := int64(0)
+		if message.From != nil {
+			userID = message.From.ID
+		}
+		slog.Info("Command processed", "command", message.Command(), "telegram_user", userID, "chat_id", message.Chat.ID, "duration", time.Since(started))
+	}()
 	switch strings.ToLower(message.Command()) {
 	case "start":
 		b.handleStart(message)

@@ -3,7 +3,7 @@ package bot
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/sadbag21/dota-bot-info/pkg/formatter"
-	"log"
+	"log/slog"
 )
 
 func (b *Bot) handlePlayer(message *tgbotapi.Message) {
@@ -16,10 +16,7 @@ func (b *Bot) handlePlayer(message *tgbotapi.Message) {
 		return
 	}
 
-	log.Printf(
-		"Getting player information for account_id=%d",
-		accountID,
-	)
+	slog.Debug("Getting player information", "account_id", accountID)
 
 	playerInfo, err := b.service.GetPlayerInfo(
 		accountID,
@@ -47,10 +44,7 @@ func (b *Bot) handleMatches(message *tgbotapi.Message) {
 		return
 	}
 
-	log.Printf(
-		"Getting recent matches for account_id=%d",
-		accountID,
-	)
+	slog.Debug("Getting recent matches", "account_id", accountID)
 
 	matches, err := b.service.GetRecentMatchesInfo(
 		accountID,
@@ -80,10 +74,7 @@ func (b *Bot) handleHeroes(message *tgbotapi.Message) {
 		return
 	}
 
-	log.Printf(
-		"Getting hero stats for account_id=%d",
-		accountID,
-	)
+	slog.Debug("Getting hero stats", "account_id", accountID)
 
 	heroes, err := b.service.GetHeroStats(
 		accountID,
@@ -113,10 +104,7 @@ func (b *Bot) handleStats(message *tgbotapi.Message) {
 		return
 	}
 
-	log.Printf(
-		"Getting extended stats for account_id=%d",
-		accountID,
-	)
+	slog.Debug("Getting extended stats", "account_id", accountID)
 
 	stats, err := b.service.GetPlayerStats(
 		accountID,

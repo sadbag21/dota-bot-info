@@ -2,7 +2,7 @@ package bot
 
 import (
 	"errors"
-	"log"
+	"log/slog"
 	"strings"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
@@ -16,7 +16,7 @@ func (b *Bot) handleCallback(query *tgbotapi.CallbackQuery) {
 	}
 	// Stop Telegram's loading indicator before starting OpenDota requests.
 	if _, ackErr := b.api.Request(answer); ackErr != nil {
-		log.Printf("Failed to answer callback: %v", ackErr)
+		slog.Error("Failed to answer callback", "error", safeTelegramError(ackErr))
 	}
 	if err != nil {
 		return
