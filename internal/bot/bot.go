@@ -24,6 +24,10 @@ type Bot struct {
 }
 
 func New(ctx context.Context, cfg config.Config, playerService *service.PlayerService) (*Bot, error) {
+	b := &Bot{service: playerService, limiter: newCommandLimiter(), ctx: ctx}
+	if err := b.selectedPlayers.open(cfg.DataDir); err != nil {
+		return nil, err
+	}
 	client := &http.Client{Timeout: 40 * time.Second}
 	api, err := tgbotapi.NewBotAPIWithClient(cfg.TelegramBotToken, tgbotapi.APIEndpoint, contextHTTPClient{ctx: ctx, client: client})
 	if err != nil {
@@ -31,7 +35,8 @@ func New(ctx context.Context, cfg config.Config, playerService *service.PlayerSe
 		return nil, fmt.Errorf("authorize Telegram bot: %w", safeTelegramError(err))
 	}
 	slog.Info("Telegram bot authorized", "username", api.Self.UserName)
-	return &Bot{api: api, service: playerService, meta: meta.NewClient(cfg.StratzAPIToken), limiter: newCommandLimiter(), ctx: ctx, httpClient: client}, nil
+	b.api, b.httpClient, b.meta = api, client, meta.NewClient(cfg.StratzAPIToken)
+	return b, nil
 }
 
 func (b *Bot) Run() {

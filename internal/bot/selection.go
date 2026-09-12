@@ -2,6 +2,7 @@ package bot
 
 import (
 	"errors"
+	"log/slog"
 	"sync"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
@@ -14,6 +15,7 @@ type playerSelectionKey struct{ chatID, userID int64 }
 type playerSelections struct {
 	mu      sync.RWMutex
 	players map[playerSelectionKey]int64
+	path    string
 }
 
 func selectionKey(message *tgbotapi.Message) (playerSelectionKey, bool) {
@@ -23,17 +25,16 @@ func selectionKey(message *tgbotapi.Message) (playerSelectionKey, bool) {
 	return playerSelectionKey{message.Chat.ID, message.From.ID}, true
 }
 
-func (b *Bot) rememberPlayer(message *tgbotapi.Message, accountID int64) {
+func (b *Bot) rememberPlayer(message *tgbotapi.Message, accountID int64) bool {
 	key, ok := selectionKey(message)
 	if !ok {
-		return
+		return false
 	}
-	b.selectedPlayers.mu.Lock()
-	defer b.selectedPlayers.mu.Unlock()
-	if b.selectedPlayers.players == nil {
-		b.selectedPlayers.players = make(map[playerSelectionKey]int64)
+	if err := b.selectedPlayers.set(key, accountID); err != nil {
+		slog.Error("Failed to save selected player", "error", err)
+		return false
 	}
-	b.selectedPlayers.players[key] = accountID
+	return true
 }
 
 func (b *Bot) resolveDotaID(message *tgbotapi.Message) (int64, error) {

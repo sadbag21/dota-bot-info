@@ -10,7 +10,7 @@ docker build -t dota-bot-info:local .
 ```
 
 Сборка запускает unit-тесты и go vet, затем создаёт Linux-бинарник.
-В итоговом образе находятся только бинарник и корневые сертификаты HTTPS.
+В итоговом образе находятся бинарник, корневые сертификаты HTTPS и пустой каталог `/data`.
 Бот работает без root. Токен, .env, Git и результаты Allure не входят в образ.
 Внешние тесты OpenDota не запускаются.
 
@@ -21,7 +21,7 @@ docker build -t dota-bot-info:local .
 TELEGRAM_BOT_TOKEN и, при необходимости, LOG_LEVEL.
 
 ```powershell
-docker run --rm --name dota-bot-info --env-file .env dota-bot-info:local
+docker run --rm --name dota-bot-info --env-file .env -e DATA_DIR=/data --mount type=volume,source=dota-bot-data,target=/data dota-bot-info:local
 ```
 
 Логи видны прямо в терминале. Ctrl+C останавливает бота.
@@ -30,7 +30,7 @@ docker run --rm --name dota-bot-info --env-file .env dota-bot-info:local
 ## Фоновый запуск
 
 ```powershell
-docker run -d --name dota-bot-info --restart unless-stopped --env-file .env dota-bot-info:local
+docker run -d --name dota-bot-info --restart unless-stopped --env-file .env -e DATA_DIR=/data --mount type=volume,source=dota-bot-data,target=/data dota-bot-info:local
 docker logs --tail 50 -f dota-bot-info
 ```
 
@@ -43,6 +43,13 @@ docker stop --timeout 15 dota-bot-info
 Для запуска остановленного контейнера: `docker start dota-bot-info`.
 Перед созданием нового контейнера с таким же именем удали остановленный:
 `docker rm dota-bot-info`. Кэш бота находится в памяти и при остановке теряется.
+Выбранные игроки хранятся отдельно в томе `dota-bot-data` и сохраняются.
+Том создаётся автоматически при первом запуске. Его каталог доступен
+пользователю 65532, под которым работает бот.
+
+При каждом пересоздании используй тот же `--mount` и `DATA_DIR=/data`.
+Удаление контейнера не удаляет именованный том. Не удаляй сам том,
+если хочешь сохранить выбранных игроков. Подробнее: [STORAGE.md](STORAGE.md).
 
 После изменения кода повтори сборку и пересоздай контейнер.
 После изменения .env также пересоздай контейнер: `docker restart` не перечитывает файл.
