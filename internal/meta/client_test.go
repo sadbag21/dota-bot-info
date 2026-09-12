@@ -92,7 +92,12 @@ func TestClientErrorsAndCancellation(t *testing.T) {
 		{200, `{"errors":[{"message":"test-secret"}],"data":null}`, ErrUnavailable},
 	} {
 		t.Run(fmt.Sprint(tt.status, tt.body), func(t *testing.T) {
-			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) { w.WriteHeader(tt.status); fmt.Fprint(w, tt.body) }))
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				w.WriteHeader(tt.status)
+				if _, err := fmt.Fprint(w, tt.body); err != nil {
+					t.Errorf("write test response: %v", err)
+				}
+			}))
 			defer server.Close()
 			c := NewClient("test-secret")
 			defer c.Close()

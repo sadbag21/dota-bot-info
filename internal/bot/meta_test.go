@@ -15,7 +15,7 @@ type fakeMeta struct {
 	err   error
 }
 
-func (f *fakeMeta) Get(ctx context.Context, position int) (meta.Report, error) {
+func (f *fakeMeta) Get(_ context.Context, position int) (meta.Report, error) {
 	f.calls = append(f.calls, position)
 	return meta.Report{Position: position, Patch: "7.41e"}, f.err
 }

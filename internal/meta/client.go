@@ -168,7 +168,10 @@ func (c *Client) request(req *http.Request, target any) error {
 		}
 		return ErrUnavailable
 	}
-	defer response.Body.Close()
+	defer func() {
+		// Closing cannot change the decoded result or the request/read error.
+		_ = response.Body.Close()
+	}()
 	switch response.StatusCode {
 	case http.StatusOK:
 	case http.StatusUnauthorized, http.StatusForbidden:
