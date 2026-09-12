@@ -36,6 +36,8 @@ func (b *Bot) handleUpdate(update tgbotapi.Update) {
 
 	case "help":
 		b.handleHelp(message)
+	case "meta":
+		b.handleMeta(message)
 
 	case "player":
 		b.handlePlayer(message)

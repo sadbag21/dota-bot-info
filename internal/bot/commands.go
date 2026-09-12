@@ -14,6 +14,7 @@ func (b *Bot) handleStart(message *tgbotapi.Message) {
 ⚔️ /matches &lt;Dota ID&gt;
 🦸 /heroes &lt;Dota ID&gt;
 📈 /stats &lt;Dota ID&gt;
+🧭 /meta — мета героев по позициям
 📚 /help
 
 Начни с /player и Dota ID. После выбора игрока команды /matches, /heroes и /stats работают без ID.`
@@ -29,6 +30,10 @@ func (b *Bot) handleHelp(message *tgbotapi.Message) {
 
 /start — запустить бота
 /help — помощь
+
+🧭 <b>Мета</b>
+/meta — выбрать позицию
+/meta [1–5] — топ героев Immortal за последние 7 полных дней актуального патча
 
 👤 <b>Игрок</b>
 /player [Dota ID] — выбрать игрока или показать выбранного

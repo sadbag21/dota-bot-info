@@ -12,6 +12,7 @@ import (
 
 type Config struct {
 	TelegramBotToken string
+	StratzAPIToken   string
 	LogLevel         slog.Level
 }
 
@@ -29,5 +30,5 @@ func Load() (Config, error) {
 			return Config{}, fmt.Errorf("invalid LOG_LEVEL: %w", err)
 		}
 	}
-	return Config{TelegramBotToken: token, LogLevel: level}, nil
+	return Config{TelegramBotToken: token, StratzAPIToken: strings.TrimSpace(os.Getenv("STRATZ_API_TOKEN")), LogLevel: level}, nil
 }

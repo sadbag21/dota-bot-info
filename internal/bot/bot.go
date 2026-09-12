@@ -9,12 +9,14 @@ import (
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/sadbag21/dota-bot-info/internal/config"
+	"github.com/sadbag21/dota-bot-info/internal/meta"
 	"github.com/sadbag21/dota-bot-info/internal/service"
 )
 
 type Bot struct {
 	api             *tgbotapi.BotAPI
 	service         playerService
+	meta            metaProvider
 	selectedPlayers playerSelections
 	ctx             context.Context
 	httpClient      *http.Client
@@ -28,10 +30,13 @@ func New(ctx context.Context, cfg config.Config, playerService *service.PlayerSe
 		return nil, fmt.Errorf("authorize Telegram bot: %w", safeTelegramError(err))
 	}
 	slog.Info("Telegram bot authorized", "username", api.Self.UserName)
-	return &Bot{api: api, service: playerService, ctx: ctx, httpClient: client}, nil
+	return &Bot{api: api, service: playerService, meta: meta.NewClient(cfg.StratzAPIToken), ctx: ctx, httpClient: client}, nil
 }
 
 func (b *Bot) Run() {
+	if closer, ok := b.meta.(interface{ Close() }); ok {
+		defer closer.Close()
+	}
 	ctx := b.ctx
 	if ctx == nil {
 		ctx = context.Background()

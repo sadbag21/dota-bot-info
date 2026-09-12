@@ -90,18 +90,18 @@ func (s *selectionService) GetPlayerStats(id int64) (*service.PlayerStats, error
 	s.statsID = id
 	return &service.PlayerStats{}, nil
 }
-func (s *selectionService) GetRecentMatchesInfo(id int64, limit int) ([]service.MatchInfo, error) {
+func (s *selectionService) GetRecentMatchesInfo(id int64, _ int) ([]service.MatchInfo, error) {
 	s.matchesID = id
 	return nil, nil
 }
-func (s *selectionService) GetHeroStats(id int64, limit int) ([]service.HeroStats, error) {
+func (s *selectionService) GetHeroStats(id int64, _ int) ([]service.HeroStats, error) {
 	s.heroesID = id
 	return nil, nil
 }
 
 func selectionTestBot(t *testing.T) (*Bot, *selectionService, *[]string) {
 	t.Helper()
-	texts := []string{}
+	var texts []string
 	api, err := tgbotapi.NewBotAPIWithClient("test-token", "https://telegram.test/bot%s/%s", telegramHTTPFunc(func(req *http.Request) (*http.Response, error) {
 		payload := `{"ok":true,"result":{"id":1,"is_bot":true,"first_name":"Test"}}`
 		if strings.HasSuffix(req.URL.Path, "/sendMessage") {
@@ -190,7 +190,7 @@ func TestSelectionsConcurrentAccess(t *testing.T) {
 		wg.Add(1)
 		go func(user int64) {
 			defer wg.Done()
-			for i := 0; i < 30; i++ {
+			for range 30 {
 				b.rememberPlayer(selectionMessage(10, user, "player", ""), user)
 				id, err := b.resolveDotaID(selectionMessage(10, user, "stats", ""))
 				if err != nil || id != user {

@@ -46,6 +46,8 @@ func callbackMessage(query *tgbotapi.CallbackQuery) (*tgbotapi.Message, error) {
 	}
 	var err error
 	switch command {
+	case "meta":
+		_, err = parseMetaPosition(id)
 	case "player", "matches", "heroes", "stats":
 		_, err = parseDotaID(message)
 	case "match", "impact":
