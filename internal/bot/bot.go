@@ -17,6 +17,7 @@ type Bot struct {
 	api             *tgbotapi.BotAPI
 	service         playerService
 	meta            metaProvider
+	limiter         *commandLimiter
 	selectedPlayers playerSelections
 	ctx             context.Context
 	httpClient      *http.Client
@@ -30,7 +31,7 @@ func New(ctx context.Context, cfg config.Config, playerService *service.PlayerSe
 		return nil, fmt.Errorf("authorize Telegram bot: %w", safeTelegramError(err))
 	}
 	slog.Info("Telegram bot authorized", "username", api.Self.UserName)
-	return &Bot{api: api, service: playerService, meta: meta.NewClient(cfg.StratzAPIToken), ctx: ctx, httpClient: client}, nil
+	return &Bot{api: api, service: playerService, meta: meta.NewClient(cfg.StratzAPIToken), limiter: newCommandLimiter(), ctx: ctx, httpClient: client}, nil
 }
 
 func (b *Bot) Run() {

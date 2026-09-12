@@ -9,19 +9,28 @@ import (
 )
 
 func (b *Bot) handleCallback(query *tgbotapi.CallbackQuery) {
+	if query == nil {
+		return
+	}
 	message, err := callbackMessage(query)
 	answer := tgbotapi.NewCallback(query.ID, "")
+	var limit commandLimit
 	if err != nil {
 		answer.Text = "Кнопка недоступна. Выполни команду заново через /help."
+	} else {
+		limit = b.limitCommand(message)
+		if limit.wait > 0 {
+			answer.Text = commandLimitText(limit.wait)
+		}
 	}
-	// Stop Telegram's loading indicator before starting OpenDota requests.
+	// Always acknowledge callbacks, including throttled ones, before API requests.
 	if _, ackErr := b.api.Request(answer); ackErr != nil {
 		slog.Error("Failed to answer callback", "error", safeTelegramError(ackErr))
 	}
-	if err != nil {
+	if err != nil || limit.wait > 0 {
 		return
 	}
-	b.handleUpdate(tgbotapi.Update{Message: message})
+	b.handleCommand(message)
 }
 
 // Reuse command validation and handlers without modifying the original message.

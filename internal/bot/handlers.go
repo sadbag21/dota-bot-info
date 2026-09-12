@@ -21,7 +21,17 @@ func (b *Bot) handleUpdate(update tgbotapi.Update) {
 	if !message.IsCommand() {
 		return
 	}
+	if limit := b.limitCommand(message); limit.wait > 0 {
+		if limit.notify {
+			b.sendMessage(message.Chat.ID, commandLimitText(limit.wait))
+		}
+		return
+	}
+	b.handleCommand(message)
+}
 
+// Commands and callbacks reach this dispatcher after one shared rate-limit check.
+func (b *Bot) handleCommand(message *tgbotapi.Message) {
 	started := time.Now()
 	defer func() {
 		userID := int64(0)
